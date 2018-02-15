@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tasker</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- LIVE RELOAD -->
+    <script>document.write('<script src="http://localhost:35729/livereload.js?snipver=1"></' + 'script>')</script>		
+    <!-- VUE -->
+    <script src="https://vuejs.org/js/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/sortable/1.4.2/Sortable.min.js"></script>
+    <script src="https://cdn.rawgit.com/David-Desmaisons/Vue.Draggable/master/dist/vuedraggable.min.js"></script>
+    <!-- MOMENT -->
+    <script src="js/moment.js"></script>
+    <!-- JQUERY -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- MATERIALIZE -->
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_orange-light_green.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        #app {
+            display: flex;
+            flex-flow: column nowrap;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+        }
+        .mdl-card {
+            margin-bottom: 1em;
+        }
+        
+        .mdl-card-wide {
+            width: 100%;
+        }
+        
+        .mdl-chip__contact_expand {
+            width: auto;
+            padding: 0 0.75rem 0 0.75rem;
+        }
+        
+        .mdl-chip-right {
+            margin-right: -0.85rem;
+        }
+        
+        .mdl-chip__text {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        .mdl-chip .material-icons {
+            margin-top: 0.3333rem;
+        }
+        
+        .mdl-list__item {
+            padding: 0.5rem;
+        }
+        
+        
+        .list-blank {
+            list-style: none;
+        }
+        
+        .mdl-textfield.is-focused .mdl-textfield__expandable-holder, .mdl-textfield.is-dirt .mdl-textfield__expandable-holder {
+            max-width: 100%;
+            width: 40vw;
+        }
+        
+        .full-width {
+            width: 100%;
+        }
+        
+        li {
+            position: relative;
+        }
+        
+        .stopwatch {
+            font-size: 4em;
+            font-weight: bold;
+        }
+        
+        .no-left-margin {
+            padding-left: 0;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Tasker</span>
+                <div class="mdl-layout-spacer"></div>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="heading-task-input">
+                        <i class="material-icons">add</i>
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" name="heading-task-input" id="heading-task-input" @keyup.enter="addTask" v-model="headerInput">
+                    </div>
+                </div>
+                <div class="mdl-layout-spacer"></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" for="heading-search-input">
+                        <i class="material-icons">search</i>
+                    </label>
+                    <div class="mdl-textfield__expandable-holder">
+                        <input class="mdl-textfield__input" type="text" name="heading-search-input" id="heading-search-input" @keyup.enter="search" v-model="searchInput">
+                    </div>
+                </div>
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="">Link 1</a>
+                    <a class="mdl-navigation__link" href="">Link 2</a>
+                    <a class="mdl-navigation__link" href="" @click="deleteStorage()">Clear All Data</a>
+                </nav>
+            </div>
+        </header>
+        <main>
+            <div class="mdl-grid">
+                <!-- LEFT COLUMN -->
+                <div class="mdl-cell mdl-cell--5-col">
+                    <task-list :show-children="true" :tasks="tasks" @click-task="inTask => clickTask(inTask)"></task-list>
+                    <h4 v-show="tasks.length == 0">Add a task to get started</h4>
+                </div>
+                <!-- RIGHT COLUMN -->
+                <div class="mdl-cell mdl-cell--7-col">
+                    <button  v-show="taskStack.tasks.length != 0" @click="clearStack()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect full-width">
+                        Clear Task Stack
+                    </button>
+                    <task-card v-for="task in taskStack.tasks" :task="task" @clear-task-from-stack="inTask => clearTaskFromStack(inTask)" @specific-click-task="inTask => specificClickTask(inTask)"  @delete-task="inTask => deleteTask(inTask)"></task-card>
+                    <div v-show="taskStack.tasks.length == 0 && tasks.length > 0">
+                        <h4>Click on a task to view its detail</h4>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">Title</div>
+                <ul class="mdl-mini-footer__link-list">
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Privacy & Terms</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+</body>
+
+<!-- TEMPLATES -->
+
+<script id="task-list-item" type="text/x-template">
+    <li class="task">
+        <span class="mdl-chip mdl-chip--contact" @click="toggleChildren();clickTask();">
+            <span class="mdl-chip__contact mdl-chip__contact_expand mdl-color--deep-orange mdl-color-text--white" v-text="task.tasks.length"></span>
+            <span class="mdl-chip__text" v-text="task.title" @click="specificClickTask();"></span>
+        </span>
+        <task-list :show-children="showChildren" :tasks="task.tasks" @specific-click-task="inTask => $emit('specific-click-task', inTask)" @click-task="inTask => $emit('click-task', inTask)"></task-list>            
+    </li>
+</script>
+
+<script id="task-list" type="text/x-template">
+    <ul class="list-blank">
+        <draggable :list="tasks" :options="{group: 'tasks', draggable:'.task'}" class="dragArea">
+            <task-list-item v-for="task in tasks"  v-show="showChildren" :task="task" @click-task="inTask => $emit('click-task', inTask)" @specific-click-task="inTask => $emit('specific-click-task', inTask)" ></task-list-item>
+        </draggable>
+    </ul>
+</script>
+
+<script id="task-card" type="text/x-template">
+    <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text" v-show="!showingTimes">
+            <div class="mdl-textfield mdl-js-textfield full-width" >
+                <input class="mdl-textfield__input" type="text" id="new-task-title" v-model="task.title" style="font-size: 2rem;"/>
+                <label class="mdl-textfield__label" for="new-task-title" v-text="task.title?'':'Task Title . . .'" style="font-size: 2rem;"></label>
+            </div>
+            <span>Created on: {{ task.created | date }}<br/></span>
+            <task-card-timer :times="task.times"></task-card-timer><br/>
+            <span v-show="task.completed">Completed on: {{ task.completed | date }}<br/></span>
+            <div class="mdl-textfield mdl-js-textfield full-width">
+                <textarea class="mdl-textfield__input" type="text" rows= "6" v-model="task.description"></textarea>
+                <label class="mdl-textfield__label" v-text="task.description?'':'Add Task Description . . .'"></label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="new-task-title" v-model="newTaskTitle" @keyup.enter="addTask">
+                <label class="mdl-textfield__label" for="new-task-title" v-text="newTaskTitle?'':'Enter New Task Title . . .'"></label>
+            </div>
+            <div>
+                <task-list :show-children="true" :tasks="task.tasks" @click-task="inTask => $emit('click-task', inTask)" @specific-click-task="inTask => $emit('specific-click-task', inTask)"></task-list>
+                <draggable :list="task.tasks" :options="{group: 'tasks'}" class="dragArea" @change="onChange">
+                    <span v-if="task.tasks.length == 0">No sub-tasks . . . <br/>Type above or drag tasks here</span>
+                </draggable>
+            </div>    
+        </div>
+        <div class="mdl-card__supporting-text" v-show="showingTimes">
+            <h4>Time Logs: </h4>
+            <task-card-timing :times="task.times" :task="task"></task-card-timing>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a v-show="!showingTimes" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="toggleTimes()">
+                Show Time Logs
+            </a>
+            <a v-show="showingTimes" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="toggleTimes()">
+                Show Task Detail (Hide Time Logs)
+            </a>
+            <a v-show="!task.completed" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="completeTask()">
+                Complete Task
+            </a>
+            <a v-show="task.completed" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="unCompleteTask()">
+                Un-Complete Task
+            </a>
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="clearTaskFromStack()">
+                Close Task
+            </a>
+            <a v-show="!showDelete" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="deleteTask()">
+                Delete Task
+            </a>
+            <a v-show="showDelete" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="deleteTaskCancel()">
+                Cancel Task Delete
+            </a>
+            <a v-show="showDelete" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="deleteTaskConfirm()">
+                Confirm Task Delete
+            </a>
+        </div>
+    </div>
+</script>
+
+<script id="task-card-timer" type="text/x-template">
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--7-col">
+            <div class="mdl-textfield mdl-js-textfield" >
+                <input class="mdl-textfield__input" type="text" id="new-task-title" v-if="!isTiming" v-model="timerTitle"  @keyup.enter="startTimer"/>
+                <input class="mdl-textfield__input" type="text" id="new-task-title" v-if="isTiming" v-model="times[0].title"/>
+                <label class="mdl-textfield__label" for="new-task-title" v-text="(timerTitle || (isTiming && times[0].title))?'':'Time Log Title . . .'"></label>
+                <button v-if="!isTiming" @click="startTimer">Start New Timer</button>
+                <button v-if="isTiming" @click="stopTimer">Stop Timer</button>
+                <button v-if="!isTiming && times.length > 0" @click="continuePrevious">Continue with "{{ times[0].title }}"</button>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--5-col">
+            <span v-if="times.length > 0 && !times[0].end" class="stopwatch">{{ stopwatch }}</span>
+        </div>
+    </div>
+</script>
+
+<script id="task-card-timing" type="text/x-template">
+    <ul class="list-blank no-left-margin">
+        <li v-for="time in times.slice(0,currentPageSize)">
+            <h5 v-text="task.title +' - '+ time.title"></small></h5>
+            <p>
+                Total Time: {{  }}<br/>
+                Started: {{ time.begin | date }}<br/>
+                <span v-if="time.end">Ended: {{ time.end | date }}</span>
+            </p>
+        </li>
+        <button v-show="times.length > currentPageSize" @click="showMore()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                Show More
+        </button>
+    </ul>
+</script>
+
+<!-- APP -->
+<script src="js/components.js"></script>
+<script src="js/tasker.js"></script>
+</html>
+
