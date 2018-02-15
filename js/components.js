@@ -26,8 +26,10 @@ Tasker.taskCard = Vue.component('task-card', {
 			this.task.completed = null
 		},
 		addTask: function(){
-			this.task.tasks.push(new Task(this.newTaskTitle));
-			this.newTaskTitle = '';
+			if(this.newTaskTitle != '') {
+				this.task.tasks.push(new Task(this.newTaskTitle));
+				this.newTaskTitle = '';
+			}
 		},
 		clearTaskFromStack: function() {
 			this.$emit('clear-task-from-stack', this.task);
