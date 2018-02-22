@@ -9,6 +9,20 @@ Tasker.dateFilter = Vue.filter('date', function(value, format){
 	return moment.unix(value/1000).format(format);
 });
 
+Tasker.truncate = Vue.filter('truncate', function(value, length, append){
+	if(value.length < length) {
+		return value;
+	}else {
+		if(typeof append == 'undefined')
+			append = '';
+		// Find first index of whitespace before length limit
+		var negativeIndex = value.split("").reverse().join("").search(/\s/);
+		console.log("Found whitespace at index ", negativeIndex, "In string", value.split().reverse().join(""))
+		var index = value.length - (negativeIndex > 0 ? negativeIndex : 0);
+		return value.substring(0, index).trim() + append;
+	}
+});
+
 Tasker.taskSearchWatcher = {
 	props: ['searchInput'],
 	computed: {
@@ -31,10 +45,13 @@ Tasker.taskCard = Vue.component('task-card', {
 	mixins: [Tasker.taskSearchWatcher],
 	data: function(){return {
 		showDelete: false,
-		showingTimes: false,
-		newTaskTitle: ''
+		newTaskTitle: '',
+		tab: 'details',
 	}},
 	methods: {
+		setTab: function(tab) {
+			this.tab = tab;
+		},
 		completeTask: function() {
 			this.task.completed = new Date().getTime()
 		},
@@ -87,7 +104,14 @@ Tasker.taskCard = Vue.component('task-card', {
 
 Tasker.taskList = Vue.component('task-list', {
 	template: '#task-list',
-	props: ['tasks', 'showChildren'],
+	props: {
+		tasks: Array,
+		showChildren: Boolean,
+		noPaddingStart: {
+			type: Boolean,
+			default: false
+		}
+	},
 	mixins: [Tasker.taskSearchWatcher],
 	computed: {
 		dragZone: function() {
@@ -136,7 +160,7 @@ Tasker.taskListItem = Vue.component('task-list-item', {
 
 Tasker.taskCardTiming = Vue.component('task-card-timing', {
 	template: '#task-card-timing',
-	props: ['times', 'task'],
+	props: ['times', 'task', 'breadCrumbs'],
 	data: function(){return {
 		currentPageSize: 5
 	}},
@@ -171,6 +195,8 @@ Tasker.taskCardTimer = Vue.component('task-card-timer', {
 			if(this.isTiming) {
 				this.stopwatch = Tasker.stopwatch(this.times[0], this.currentTime).join(":");
 				this.totalTime = Tasker.totalTime(this.times[0]);
+			}else {
+				this.stopwatch = '00:00:00';
 			}
 
 			// Repeat every second

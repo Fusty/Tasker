@@ -95,6 +95,15 @@ Tasker.taskPath = function(task, tasks) {
 	return path;
 }
 
+Tasker.stringToSeconds = function(input) {
+	input = input.trim();
+	var hhmmss = /^\d{1,2}:\d{1,2}:\d{1,2}$/;
+	var hhmm = /^\d{1,2}:\d{1,2}$/;
+	var numHourNumMinute = /^(\d+)\s?(hours|hour|h)\s?(\d+)\s?(minutes|minute|mins|min|m)/;
+	var numHour = '';
+	var numMinute = '';
+}
+
 Number.prototype.pad = function(size) {
     var s = String(this);
     while (s.length < (size || 2)) {s = "0" + s;}
