@@ -36,7 +36,7 @@ input.light2 {
 }
 
 input.light2::placeholder {
-  color: black;
+  color: #408181;
 }
 
 input.light1 {
@@ -167,9 +167,6 @@ input.more-margin {
   #app > header .nav .title-input input {
     width: 100%;
     font-size: 2rem;
-  }
-  #app > header .nav .title-input input::placeholder {
-    color: #0d1b1b;
   }
 }
 
@@ -389,7 +386,7 @@ button.full-width {
 }
 
 .task-description::placeholder {
-  color: #1e3d3d;
+  color: #408181;
 }
 
 .stopwatch {

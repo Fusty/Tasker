@@ -47,7 +47,7 @@ input {
 		color: $light2;
 		border-bottom: 2px dashed darken($light2, 30%);
 		&::placeholder {
-			color: darken($light2, 50%);
+			color: darken($light2, 10%);
 		}
 	}
 	
@@ -185,9 +185,6 @@ input {
 				input {
 					width: 100%;
 					font-size: 2rem;
-					&::placeholder {
-						color: darken($light2, 40%);
-					}
 				}
 			}
 		}
@@ -398,7 +395,7 @@ button {
 	margin-top: 1rem;
 	padding: 0.5rem;
 	&::placeholder {
-		color: darken($light2, 30%);
+		color: darken($light2, 10%);
 	}
 }
 
