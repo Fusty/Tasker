@@ -1,8 +1,8 @@
-$green-dark: #182825;
-$green: #d8F793;
-$blue: #8D99AE;
-$magenta: #F4225A;
-$turquoise: #47E5BC;
+$dark1: #3B3561;
+$light1: #EAD94C;
+$light2: #51A3A3;
+$neutral1: #D1D1D1;
+$danger1: #DD7373;
 $white: white;
 
 $font-family: Arial;
@@ -17,7 +17,7 @@ $breakpoint-small: 768px;
 }
 
 body {
-	background: darken($green-dark, 8%);
+	background: darken($dark1, 8%);
 	font-family: $font-family;
 	margin: 0px;
 	color: $white;
@@ -43,25 +43,25 @@ input {
 	border: none;
 	border-bottom: 2px solid $white;
 	
-	&.turquoise {
-		color: $turquoise;
-		border-bottom: 2px dashed darken($turquoise, 30%);
+	&.light2 {
+		color: $light2;
+		border-bottom: 2px dashed darken($light2, 30%);
 		&::placeholder {
-			color: darken($turquoise, 50%);
+			color: darken($light2, 50%);
 		}
 	}
 	
-	&.green {
-		color: $green;
-		border-bottom: 2px dashed darken($green, 30%);
+	&.light1 {
+		color: $light1;
+		border-bottom: 2px dashed darken($light1, 20%);
 		&::placeholder {
-			color: darken($green, 50%);
+			color: darken($light1, 20%);
 		}
 	}
 	
 	&.blue {
-		color: $blue;
-		border-bottom: 2px solid $blue;
+		color: $neutral1;
+		border-bottom: 2px solid $neutral1;
 	}
 	
 	&.big {
@@ -119,7 +119,7 @@ input {
 // 
 #app>header {
 	height: 5rem;
-	background: $green-dark;
+	background: $dark1;
 	
 	.nav {
 		display: flex;
@@ -131,8 +131,8 @@ input {
 			.logo {
 				display: block;
 				flex: 0 0 auto;
-				background: $magenta;
-				color: $green;
+				background: $danger1;
+				color: $light1;
 				font-size: 2.5rem;
 				font-weight: bold;
 				padding: 1rem 2rem 1rem 2rem;
@@ -150,7 +150,7 @@ input {
 					width: 80%;
 					font-size: 2rem;
 					&::placeholder {
-						color: darken($turquoise, 40%);
+						color: darken($light1, 20%);
 					}
 				}	min-width: 17rem;
 
@@ -161,8 +161,8 @@ input {
 			.logo {
 				display: none;
 				flex: 0 0 auto;
-				background: $magenta;
-				color: $green;
+				background: $danger1;
+				color: $light1;
 				font-size: 2.5rem;
 				font-weight: bold;
 				padding: 1rem 2rem 1rem 2rem;
@@ -171,8 +171,8 @@ input {
 			.logo-sm {
 				display: block;
 				flex: 0 0 auto;
-				background: $magenta;
-				color: $green;
+				background: $danger1;
+				color: $light1;
 				font-size: 2.5rem;
 				font-weight: bold;
 				padding: 1rem 2rem 1rem 2rem;
@@ -186,7 +186,7 @@ input {
 					width: 100%;
 					font-size: 2rem;
 					&::placeholder {
-						color: darken($turquoise, 40%);
+						color: darken($light2, 40%);
 					}
 				}
 			}
@@ -208,15 +208,15 @@ input {
 		
 		.sub-task-count {
 			padding: 0.5rem 0.725rem 0.5rem 0.725rem;
-			background: $magenta;
-			color: $green;
+			background: $danger1;
+			color: $dark1;
 			border-top-left-radius: .25rem;
 			border-bottom-left-radius: .25rem;
 		}
 		.task-title {
 			padding: 0.5rem 0.725rem 0.5rem 0.725rem;
-			background: $green;
-			color: $magenta;
+			background: $light1;
+			color: $dark1;
 			border-top-right-radius: .25rem;
 			border-bottom-right-radius: .25rem;
 		}
@@ -225,88 +225,88 @@ input {
 
 // Shared Stuff
 button {
-	background: $blue;
-	border: 2px solid $blue;
+	background: $neutral1;
+	border: 2px solid $neutral1;
 	border-radius: $border-radius;
 	padding: 0.5rem 0.725rem 0.5rem 0.725rem;
-	color: $green-dark;
+	color: $dark1;
 	font-weight: bold;
 	outline: none;
 	
 	&:hover {
-		background: darken($blue, 15%);
-		border: 2px solid darken($blue, 15%);
+		background: darken($neutral1, 15%);
+		border: 2px solid darken($neutral1, 15%);
 	}
 	&.outline {
 		background: none;
-		color: $blue;
+		color: $neutral1;
 		&:hover {
-			color: darken($blue, 15%);
+			color: darken($neutral1, 15%);
 		}
 	}
 	
-	&.green {
-		background: $green;
-		border: 2px solid $green;
-		color: $green-dark;
+	&.light1 {
+		background: $light1;
+		border: 2px solid $light1;
+		color: $dark1;
 		&:hover {
-			background: darken($green, 15%);
-			border: 2px solid darken($green, 15%);
+			background: darken($light1, 15%);
+			border: 2px solid darken($light1, 15%);
 		}
 		&.outline {
 			background: none;
-			color: $green;
+			color: $light1;
 			&:hover {
-				color: darken($green, 15%);
+				color: darken($light1, 15%);
 			}
 		}
 	}
 	
 	&.magenta {
-		background: $magenta;
-		border: 2px solid $magenta;
-		color: $green-dark;
+		background: $danger1;
+		border: 2px solid $danger1;
+		color: $dark1;
 		&:hover {
-			background: darken($magenta, 15%);
-			border: 2px solid darken($magenta, 15%);
+			background: darken($danger1, 15%);
+			border: 2px solid darken($danger1, 15%);
 		}
 		&.outline {
 			background: none;
-			color: $magenta;
+			color: $danger1;
 			&:hover {
-				color: darken($magenta, 15%);
+				color: darken($danger1, 15%);
 			}
 		}
 	}
 	
-	&.turquoise {
-		background: $turquoise;
-		border: 2px solid $turquoise;
-		color: $green-dark;
+	&.light2 {
+		background: $light2;
+		border: 2px solid $light2;
+		color: $dark1;
 		&:hover {
-			background: darken($turquoise, 20%);
-			border: 2px solid darken($turquoise, 20%);
+			background: darken($light2, 20%);
+			border: 2px solid darken($light2, 20%);
 		}
 		&.outline {
 			background: none;
-			color: $turquoise;
+			color: $light2;
 			&:hover {
-				color: darken($turquoise, 20%);
+				color: darken($light2, 20%);
 			}
 		}
 	}
 	
-	&.green-dark {
-		background: $green-dark;
-		border: 2px solid $green-dark;
-		color: darken($green-dark, 8%);
+	&.dark {
+		background: $dark1;
+		border: 2px solid $dark1;
+		color: darken($dark1, 8%);
 		&:hover {
-			background: darken($green-dark, 5%);
-			border: 2px solid darken($green-dark, 5%);
+			background: darken($dark1, 5%);
+			border: 2px solid darken($dark1, 5%);
 		}
 		&.outline {
 			background: none;
-			color: $green-dark;
+			color: $dark1;
 		}
 	}
 	
@@ -373,7 +373,7 @@ button {
 
 .task-card {
 	padding: 0.25rem;
-	border: 2px solid $magenta;
+	border: 2px solid $danger1;
 	border-radius: $border-radius;
 	
 	main {
@@ -382,7 +382,7 @@ button {
 }
 
 .bread-crumbs {
-	color: lighten($green-dark, 25%); 
+	color: lighten($dark1, 25%); 
 	margin-top: 0.25rem;
 	margin-bottom: 0.25rem;
 }
@@ -391,22 +391,22 @@ button {
 	width: 100%;
 	font-size: 1.5rem;
 	background: none;
-	color: $turquoise;
+	color: $light2;
 	border: none;
-	border-left: 2px dashed $turquoise;
-	border-bottom: 2px dashed $turquoise;
+	border-left: 2px dashed $light2;
+	border-bottom: 2px dashed $light2;
 	margin-top: 1rem;
 	padding: 0.5rem;
 	&::placeholder {
-		color: darken($turquoise, 30%);
+		color: darken($light2, 30%);
 	}
 }
 
 .stopwatch {
 	font-size: 3rem;
-	color: $green-dark;
+	color: $danger1;
 	
 	&.timer-in-progress {
-		color: $green;
+		color: $light1;
 	}
 }

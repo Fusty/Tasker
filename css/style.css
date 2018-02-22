@@ -3,7 +3,7 @@
 }
 
 body {
-  background: #090f0d;
+  background: #2b2747;
   font-family: Arial;
   margin: 0px;
   color: white;
@@ -30,27 +30,27 @@ input {
   border-bottom: 2px solid white;
 }
 
-input.turquoise {
-  color: #47E5BC;
-  border-bottom: 2px dashed #128164;
+input.light2 {
+  color: #51A3A3;
+  border-bottom: 2px dashed #1e3d3d;
 }
 
-input.turquoise::placeholder {
-  color: #06271f;
+input.light2::placeholder {
+  color: black;
 }
 
-input.green {
-  color: #d8F793;
-  border-bottom: 2px dashed #a0e011;
+input.light1 {
+  color: #EAD94C;
+  border-bottom: 2px dashed #baa816;
 }
 
-input.green::placeholder {
-  color: #5c810a;
+input.light1::placeholder {
+  color: #baa816;
 }
 
 input.blue {
-  color: #8D99AE;
-  border-bottom: 2px solid #8D99AE;
+  color: #D1D1D1;
+  border-bottom: 2px solid #D1D1D1;
 }
 
 input.big {
@@ -104,7 +104,7 @@ input.more-margin {
 
 #app > header {
   height: 5rem;
-  background: #182825;
+  background: #3B3561;
 }
 
 #app > header .nav {
@@ -118,8 +118,8 @@ input.more-margin {
   #app > header .nav .logo {
     display: block;
     flex: 0 0 auto;
-    background: #F4225A;
-    color: #d8F793;
+    background: #DD7373;
+    color: #EAD94C;
     font-size: 2.5rem;
     font-weight: bold;
     padding: 1rem 2rem 1rem 2rem;
@@ -137,7 +137,7 @@ input.more-margin {
     font-size: 2rem;
   }
   #app > header .nav .title-input input::placeholder {
-    color: #0c5441;
+    color: #baa816;
   }
 }
 
@@ -145,8 +145,8 @@ input.more-margin {
   #app > header .nav .logo {
     display: none;
     flex: 0 0 auto;
-    background: #F4225A;
-    color: #d8F793;
+    background: #DD7373;
+    color: #EAD94C;
     font-size: 2.5rem;
     font-weight: bold;
     padding: 1rem 2rem 1rem 2rem;
@@ -154,8 +154,8 @@ input.more-margin {
   #app > header .nav .logo-sm {
     display: block;
     flex: 0 0 auto;
-    background: #F4225A;
-    color: #d8F793;
+    background: #DD7373;
+    color: #EAD94C;
     font-size: 2.5rem;
     font-weight: bold;
     padding: 1rem 2rem 1rem 2rem;
@@ -169,7 +169,7 @@ input.more-margin {
     font-size: 2rem;
   }
   #app > header .nav .title-input input::placeholder {
-    color: #0c5441;
+    color: #0d1b1b;
   }
 }
 
@@ -186,118 +186,118 @@ input.more-margin {
 
 .task-list .task-list-item .sub-task-count {
   padding: 0.5rem 0.725rem 0.5rem 0.725rem;
-  background: #F4225A;
-  color: #d8F793;
+  background: #DD7373;
+  color: #3B3561;
   border-top-left-radius: .25rem;
   border-bottom-left-radius: .25rem;
 }
 
 .task-list .task-list-item .task-title {
   padding: 0.5rem 0.725rem 0.5rem 0.725rem;
-  background: #d8F793;
-  color: #F4225A;
+  background: #EAD94C;
+  color: #3B3561;
   border-top-right-radius: .25rem;
   border-bottom-right-radius: .25rem;
 }
 
 button {
-  background: #8D99AE;
-  border: 2px solid #8D99AE;
+  background: #D1D1D1;
+  border: 2px solid #D1D1D1;
   border-radius: 0.25rem;
   padding: 0.5rem 0.725rem 0.5rem 0.725rem;
-  color: #182825;
+  color: #3B3561;
   font-weight: bold;
   outline: none;
 }
 
 button:hover {
-  background: #63728b;
-  border: 2px solid #63728b;
+  background: #ababab;
+  border: 2px solid #ababab;
 }
 
 button.outline {
   background: none;
-  color: #8D99AE;
+  color: #D1D1D1;
 }
 
 button.outline:hover {
-  color: #63728b;
+  color: #ababab;
 }
 
-button.green {
-  background: #d8F793;
-  border: 2px solid #d8F793;
-  color: #182825;
+button.light1 {
+  background: #EAD94C;
+  border: 2px solid #EAD94C;
+  color: #3B3561;
 }
 
-button.green:hover {
-  background: #bef24c;
-  border: 2px solid #bef24c;
+button.light1:hover {
+  background: #d1bd19;
+  border: 2px solid #d1bd19;
 }
 
-button.green.outline {
+button.light1.outline {
   background: none;
-  color: #d8F793;
+  color: #EAD94C;
 }
 
-button.green.outline:hover {
-  color: #bef24c;
+button.light1.outline:hover {
+  color: #d1bd19;
 }
 
 button.magenta {
-  background: #F4225A;
-  border: 2px solid #F4225A;
-  color: #182825;
+  background: #DD7373;
+  border: 2px solid #DD7373;
+  color: #3B3561;
 }
 
 button.magenta:hover {
-  background: #c00a3a;
-  border: 2px solid #c00a3a;
+  background: #ce3535;
+  border: 2px solid #ce3535;
 }
 
 button.magenta.outline {
   background: none;
-  color: #F4225A;
+  color: #DD7373;
 }
 
 button.magenta.outline:hover {
-  color: #c00a3a;
+  color: #ce3535;
 }
 
-button.turquoise {
-  background: #47E5BC;
-  border: 2px solid #47E5BC;
-  color: #182825;
+button.light2 {
+  background: #51A3A3;
+  border: 2px solid #51A3A3;
+  color: #3B3561;
 }
 
-button.turquoise:hover {
-  background: #19ad87;
-  border: 2px solid #19ad87;
+button.light2:hover {
+  background: #2f5f5f;
+  border: 2px solid #2f5f5f;
 }
 
-button.turquoise.outline {
+button.light2.outline {
   background: none;
-  color: #47E5BC;
+  color: #51A3A3;
 }
 
-button.turquoise.outline:hover {
-  color: #19ad87;
+button.light2.outline:hover {
+  color: #2f5f5f;
 }
 
-button.green-dark {
-  background: #182825;
-  border: 2px solid #182825;
-  color: #090f0d;
+button.dark {
+  background: #3B3561;
+  border: 2px solid #3B3561;
+  color: #2b2747;
 }
 
-button.green-dark:hover {
-  background: #0e1816;
-  border: 2px solid #0e1816;
+button.dark:hover {
+  background: #312c51;
+  border: 2px solid #312c51;
 }
 
-button.green-dark.outline {
+button.dark.outline {
   background: none;
-  color: #182825;
+  color: #3B3561;
 }
 
 button.full-width {
@@ -362,7 +362,7 @@ button.full-width {
 
 .task-card {
   padding: 0.25rem;
-  border: 2px solid #F4225A;
+  border: 2px solid #DD7373;
   border-radius: 0.25rem;
 }
 
@@ -371,7 +371,7 @@ button.full-width {
 }
 
 .bread-crumbs {
-  color: #48786f;
+  color: #7269ad;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
@@ -380,24 +380,24 @@ button.full-width {
   width: 100%;
   font-size: 1.5rem;
   background: none;
-  color: #47E5BC;
+  color: #51A3A3;
   border: none;
-  border-left: 2px dashed #47E5BC;
-  border-bottom: 2px dashed #47E5BC;
+  border-left: 2px dashed #51A3A3;
+  border-bottom: 2px dashed #51A3A3;
   margin-top: 1rem;
   padding: 0.5rem;
 }
 
 .task-description::placeholder {
-  color: #128164;
+  color: #1e3d3d;
 }
 
 .stopwatch {
   font-size: 3rem;
-  color: #182825;
+  color: #DD7373;
 }
 
 .stopwatch.timer-in-progress {
-  color: #d8F793;
+  color: #EAD94C;
 }
 /*# sourceMappingURL=style.css.map */

@@ -27,7 +27,7 @@
                 <div class="logo">Tasker</div>
                 <div class="logo-sm">T</div>
                 <div class="title-input">
-                    <input type="text" id="title-input" class="turquoise" placeholder="New Task Title . . ." @keyup.enter="addTask" v-model="headerInput"/>
+                    <input type="text" id="title-input" class="light1" placeholder="New Task Title . . ." @keyup.enter="addTask" v-model="headerInput"/>
                 </div>
             </nav>
         </header>
@@ -78,14 +78,14 @@
 <script id="task-card" type="text/x-template">
     <div class="task-card">
         <header class="centered-row border-group-horizontal">
-            <button class="green" :class="{grow: tab == 'details', outline: tab != 'details' }" @click="setTab('details')">Task Details</button>
-            <button class="green" :class="{grow: tab == 'times', outline: tab != 'times' }" @click="setTab('times')">Time Logs</button>
-            <button class="green" :class="{grow: tab == 'calendar', outline: tab != 'calendar' }" @click="setTab('calendar')">Task Calendar</button>
+            <button class="light1" :class="{grow: tab == 'details', outline: tab != 'details' }" @click="setTab('details')">Task Details</button>
+            <button class="light1" :class="{grow: tab == 'times', outline: tab != 'times' }" @click="setTab('times')">Time Logs</button>
+            <button class="light1" :class="{grow: tab == 'calendar', outline: tab != 'calendar' }" @click="setTab('calendar')">Task Calendar</button>
         </header>
         <main>
             <div v-show="tab == 'details'">
                 <task-card-timer :times="task.times"></task-card-timer>
-                <input class="turquoise big full-width more-margin" type="text" id="new-task-title" v-model="task.title" placeholder="Enter Task Title . . ."/>
+                <input class="light2 big full-width more-margin" type="text" id="new-task-title" v-model="task.title" placeholder="Enter Task Title . . ."/>
                 <textarea class="task-description" v-model="task.description" rows="6" placeholder="Enter Task Description . . ."></textarea>
                 <p class="bread-crumbs" v-text="breadCrumbs"></p>
                 <!-- <p v-text="breadCrumbs"></p>
@@ -118,19 +118,19 @@
                 </div>
             </main>
             <footer class="border-group-horizontal">
-                <button v-if="!task.completed" class="grow turquoise outline" @click="completeTask()">
+                <button v-if="!task.completed" class="grow light2 outline" @click="completeTask()">
                     Complete Task
                 </button>
-                <button v-if="task.completed" class="grow turquoise outline" @click="unCompleteTask()">
+                <button v-if="task.completed" class="grow light2 outline" @click="unCompleteTask()">
                     Un-Complete Task
                 </button>
-                <button @click="clearTaskFromStack()" class="grow green outline">
+                <button @click="clearTaskFromStack()" class="grow light1 outline">
                     Close Task
                 </button>
                 <button v-if="!showDelete" class="grow magenta outline" @click="deleteTask()">
                     Delete Task
                 </button>
-                <button v-if="showDelete" class="grow green outline" @click="deleteTaskCancel()">
+                <button v-if="showDelete" class="grow light1 outline" @click="deleteTaskCancel()">
                     Cancel Task Delete
                 </button>
                 <button v-if="showDelete" class="grow magenta outline" @click="deleteTaskConfirm()">
@@ -143,20 +143,20 @@
     <script id="task-card-timer" type="text/x-template">
         <div class="row centered-row">
             <div class="width-7">
-                <input class="big green" type="text" id="new-task-title" v-if="!isTiming" v-model="timerTitle"  @keyup.enter="startTimer" placeholder="Enter time log title . . ."/>
-                <input class="big green" type="text" id="new-task-title" v-if="isTiming" v-model="times[0].title"/>
+                <input class="big light1" type="text" id="new-task-title" v-if="!isTiming" v-model="timerTitle"  @keyup.enter="startTimer" placeholder="Enter time log title . . ."/>
+                <input class="big light1" type="text" id="new-task-title" v-if="isTiming" v-model="times[0].title"/>
             </div>
             <div class="width-5 min-width-18">
                 <span class="stopwatch" :class="{'timer-in-progress': isTiming}">{{ stopwatch }}</span>
             </div>
             <div class="width-12 border-group-horizontal">
-                    <button v-if="!isTiming" @click="startTimer" class="green outline grow">
+                    <button v-if="!isTiming" @click="startTimer" class="light1 outline grow">
                         Start Timer
                     </button>
                     <button v-if="isTiming" @click="stopTimer" class="magenta outline grow">
                         Stop Timer
                     </button>
-                    <button  v-if="!isTiming && times.length > 0" @click="continuePrevious" class="turquoise outline">
+                    <button  v-if="!isTiming && times.length > 0" @click="continuePrevious" class="light2 outline">
                         Continue with "{{ times[0].title | truncate(40, ' . . .')}}"
                     </button>
                 </div>
