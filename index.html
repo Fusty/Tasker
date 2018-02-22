@@ -141,14 +141,12 @@
     </script>
     
     <script id="task-card-timer" type="text/x-template">
-        <div class="row">
+        <div class="row centered-row">
             <div class="width-7">
-                <div class="mdl-textfield mdl-js-textfield" >
-                    <input class="big green" type="text" id="new-task-title" v-if="!isTiming" v-model="timerTitle"  @keyup.enter="startTimer" placeholder="Enter time log title . . ."/>
-                    <input class="big green" type="text" id="new-task-title" v-if="isTiming" v-model="times[0].title"/>
-                </div>
+                <input class="big green" type="text" id="new-task-title" v-if="!isTiming" v-model="timerTitle"  @keyup.enter="startTimer" placeholder="Enter time log title . . ."/>
+                <input class="big green" type="text" id="new-task-title" v-if="isTiming" v-model="times[0].title"/>
             </div>
-            <div class="width-5">
+            <div class="width-5 min-width-18">
                 <span class="stopwatch" :class="{'timer-in-progress': isTiming}">{{ stopwatch }}</span>
             </div>
             <div class="width-12 border-group-horizontal">
@@ -168,7 +166,7 @@
     <script id="task-card-timing" type="text/x-template">
         <ul class="list-blank no-left-margin">
             <li v-for="time in times.slice(0,currentPageSize)">
-                <h5 v-text="breadCrumbs +' -> '+ time.title"></small></h5>
+                <h5 v-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title) +' -> ' + time.title"></small></h5>
                 <p>
                     Started: {{ time.begin | date }}<br/>
                     <span v-if="time.end">Ended: {{ time.end | date }}</span>

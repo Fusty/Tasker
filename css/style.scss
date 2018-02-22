@@ -12,6 +12,10 @@ $border-radius: 0.25rem;
 
 $breakpoint-small: 768px;
 
+* {
+	box-sizing : border-box;
+}
+
 body {
 	background: darken($green-dark, 8%);
 	font-family: $font-family;
@@ -80,6 +84,9 @@ input {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-around;
+	&>* {
+		flex: 0 0 auto;
+	}
 }
 
 .width-2 {
@@ -101,6 +108,10 @@ input {
 .width-12 {
 	flex: 1 0 auto;
 	width: calc(100% - #{$gutter});
+}
+
+.min-width-18 {
+	min-width: 18rem;
 }
 
 // 
@@ -141,7 +152,8 @@ input {
 					&::placeholder {
 						color: darken($turquoise, 40%);
 					}
-				}
+				}	min-width: 17rem;
+
 			}
 		}
 

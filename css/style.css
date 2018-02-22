@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: #090f0d;
   font-family: Arial;
@@ -70,6 +74,10 @@ input.more-margin {
   justify-content: space-around;
 }
 
+.row > * {
+  flex: 0 0 auto;
+}
+
 .width-2 {
   flex: 1 0 auto;
   width: calc(100%*2/12 - 1rem);
@@ -88,6 +96,10 @@ input.more-margin {
 .width-12 {
   flex: 1 0 auto;
   width: calc(100% - 1rem);
+}
+
+.min-width-18 {
+  min-width: 18rem;
 }
 
 #app > header {
@@ -118,6 +130,7 @@ input.more-margin {
   #app > header .nav .title-input {
     flex: 1 0 auto;
     padding: 0 3em 0 3em;
+    min-width: 17rem;
   }
   #app > header .nav .title-input input {
     width: 80%;
