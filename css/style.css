@@ -1,0 +1,390 @@
+body {
+  background: #090f0d;
+  font-family: Arial;
+  margin: 0px;
+  color: white;
+}
+
+#app > main {
+  margin: 1rem;
+}
+
+ul {
+  -webkit-margin-before: 0px;
+  -webkit-margin-after: 0px;
+}
+
+.no-padding-start {
+  -webkit-padding-start: 0px;
+}
+
+input {
+  outline: none;
+  color: white;
+  background: none;
+  border: none;
+  border-bottom: 2px solid white;
+}
+
+input.turquoise {
+  color: #47E5BC;
+  border-bottom: 2px dashed #128164;
+}
+
+input.turquoise::placeholder {
+  color: #06271f;
+}
+
+input.green {
+  color: #d8F793;
+  border-bottom: 2px dashed #a0e011;
+}
+
+input.green::placeholder {
+  color: #5c810a;
+}
+
+input.blue {
+  color: #8D99AE;
+  border-bottom: 2px solid #8D99AE;
+}
+
+input.big {
+  font-size: 2rem;
+  padding: 0.25rem;
+}
+
+input.full-width {
+  width: 100%;
+}
+
+input.more-margin {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.width-2 {
+  flex: 1 0 auto;
+  width: calc(100%*2/12 - 1rem);
+}
+
+.width-5 {
+  flex: 1 0 auto;
+  width: calc(100%*5/12 - 1rem);
+}
+
+.width-7 {
+  flex: 1 0 auto;
+  width: calc(100%*7/12 - 1rem);
+}
+
+.width-12 {
+  flex: 1 0 auto;
+  width: calc(100% - 1rem);
+}
+
+#app > header {
+  height: 5rem;
+  background: #182825;
+}
+
+#app > header .nav {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: baseline;
+}
+
+@media (min-width: 768px) {
+  #app > header .nav .logo {
+    display: block;
+    flex: 0 0 auto;
+    background: #F4225A;
+    color: #d8F793;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem 1rem 2rem;
+  }
+  #app > header .nav .logo-sm {
+    display: none;
+  }
+  #app > header .nav .title-input {
+    flex: 1 0 auto;
+    padding: 0 3em 0 3em;
+  }
+  #app > header .nav .title-input input {
+    width: 80%;
+    font-size: 2rem;
+  }
+  #app > header .nav .title-input input::placeholder {
+    color: #0c5441;
+  }
+}
+
+@media (max-width: 768px) {
+  #app > header .nav .logo {
+    display: none;
+    flex: 0 0 auto;
+    background: #F4225A;
+    color: #d8F793;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem 1rem 2rem;
+  }
+  #app > header .nav .logo-sm {
+    display: block;
+    flex: 0 0 auto;
+    background: #F4225A;
+    color: #d8F793;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem 1rem 2rem;
+  }
+  #app > header .nav .title-input {
+    flex: 1 0 auto;
+    padding: 0 3em 0 3em;
+  }
+  #app > header .nav .title-input input {
+    width: 100%;
+    font-size: 2rem;
+  }
+  #app > header .nav .title-input input::placeholder {
+    color: #0c5441;
+  }
+}
+
+.task-list {
+  list-style: none;
+}
+
+.task-list .task-list-item {
+  padding: 0.5rem 0 0.5rem 0;
+  font-weight: bold;
+  border-radius: 0.25rem;
+  line-height: 2rem;
+}
+
+.task-list .task-list-item .sub-task-count {
+  padding: 0.5rem 0.725rem 0.5rem 0.725rem;
+  background: #F4225A;
+  color: #d8F793;
+  border-top-left-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+}
+
+.task-list .task-list-item .task-title {
+  padding: 0.5rem 0.725rem 0.5rem 0.725rem;
+  background: #d8F793;
+  color: #F4225A;
+  border-top-right-radius: .25rem;
+  border-bottom-right-radius: .25rem;
+}
+
+button {
+  background: #8D99AE;
+  border: 2px solid #8D99AE;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.725rem 0.5rem 0.725rem;
+  color: #182825;
+  font-weight: bold;
+  outline: none;
+}
+
+button:hover {
+  background: #63728b;
+  border: 2px solid #63728b;
+}
+
+button.outline {
+  background: none;
+  color: #8D99AE;
+}
+
+button.outline:hover {
+  color: #63728b;
+}
+
+button.green {
+  background: #d8F793;
+  border: 2px solid #d8F793;
+  color: #182825;
+}
+
+button.green:hover {
+  background: #bef24c;
+  border: 2px solid #bef24c;
+}
+
+button.green.outline {
+  background: none;
+  color: #d8F793;
+}
+
+button.green.outline:hover {
+  color: #bef24c;
+}
+
+button.magenta {
+  background: #F4225A;
+  border: 2px solid #F4225A;
+  color: #182825;
+}
+
+button.magenta:hover {
+  background: #c00a3a;
+  border: 2px solid #c00a3a;
+}
+
+button.magenta.outline {
+  background: none;
+  color: #F4225A;
+}
+
+button.magenta.outline:hover {
+  color: #c00a3a;
+}
+
+button.turquoise {
+  background: #47E5BC;
+  border: 2px solid #47E5BC;
+  color: #182825;
+}
+
+button.turquoise:hover {
+  background: #19ad87;
+  border: 2px solid #19ad87;
+}
+
+button.turquoise.outline {
+  background: none;
+  color: #47E5BC;
+}
+
+button.turquoise.outline:hover {
+  color: #19ad87;
+}
+
+button.green-dark {
+  background: #182825;
+  border: 2px solid #182825;
+  color: #090f0d;
+}
+
+button.green-dark:hover {
+  background: #0e1816;
+  border: 2px solid #0e1816;
+}
+
+button.green-dark.outline {
+  background: none;
+  color: #182825;
+}
+
+button.full-width {
+  width: 100%;
+}
+
+.border-group-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.border-group-horizontal > *:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.border-group-horizontal > *:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.border-group-horizontal > *:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.border-group-horizontal > *:only-child {
+  border-radius: 0.25rem;
+}
+
+.border-group-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.border-group-vertical > *:first-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.border-group-vertical > *:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.border-group-vertical > *:last-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.border-group-vertical > *:only-child {
+  border-radius: 0.25rem;
+}
+
+.centered-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.task-card {
+  padding: 0.25rem;
+  border: 2px solid #F4225A;
+  border-radius: 0.25rem;
+}
+
+.task-card main {
+  margin: 2rem 3rem 2rem 2rem;
+}
+
+.bread-crumbs {
+  color: #48786f;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.task-description {
+  width: 100%;
+  font-size: 1.5rem;
+  background: none;
+  color: #47E5BC;
+  border: none;
+  border-left: 2px dashed #47E5BC;
+  border-bottom: 2px dashed #47E5BC;
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
+.task-description::placeholder {
+  color: #128164;
+}
+
+.stopwatch {
+  font-size: 3rem;
+  color: #182825;
+}
+
+.stopwatch.timer-in-progress {
+  color: #d8F793;
+}
+/*# sourceMappingURL=style.css.map */
