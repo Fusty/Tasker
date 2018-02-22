@@ -9,10 +9,26 @@ Tasker.dateFilter = Vue.filter('date', function(value, format){
 	return moment.unix(value/1000).format(format);
 });
 
+Tasker.taskSearchWatcher = {
+	props: ['searchInput'],
+	computed: {
+		isSearchResult: function() {
+			return Tasker.searchTask(this.task, this.searchInput.slice(0).trim());
+		}
+	},
+	watch: {
+		searchInput: function() {
+			if(this.task && this.searchInput != '') {
+				this.showChildren = true;
+			}
+		}
+	}
+}
+
 Tasker.taskCard = Vue.component('task-card', {
 	template: '#task-card',
-	props: ['task'],
-	componenets: ['task-list'],
+	props: ['task', 'tasks'],
+	mixins: [Tasker.taskSearchWatcher],
 	data: function(){return {
 		showDelete: false,
 		showingTimes: false,
@@ -56,12 +72,23 @@ Tasker.taskCard = Vue.component('task-card', {
 		toggleTimes: function() {
 			this.showingTimes = !this.showingTimes;
 		}
+	},
+	computed: {
+		breadCrumbs: function() {
+			if(this.taskPath.length > 1)
+				return Tasker.taskPath(this.task, this.tasks).map(task => task.title).join(" -> ");
+			return '';
+		},
+		taskPath: function() {
+			return Tasker.taskPath(this.task, this.tasks);
+		}
 	}
 });
 
 Tasker.taskList = Vue.component('task-list', {
 	template: '#task-list',
 	props: ['tasks', 'showChildren'],
+	mixins: [Tasker.taskSearchWatcher],
 	computed: {
 		dragZone: function() {
 			if(this.tasks.length == 0) {
@@ -84,6 +111,7 @@ Tasker.taskList = Vue.component('task-list', {
 Tasker.taskListItem = Vue.component('task-list-item', {
 	template: '#task-list-item',
 	props: ['task'],
+	mixins: [Tasker.taskSearchWatcher],
 	data: function(){return {
 		showChildren: false
 	}},
@@ -97,6 +125,11 @@ Tasker.taskListItem = Vue.component('task-list-item', {
 		},
 		specificClickTask: function() {
 			this.$emit('specific-click-task', this.task);
+		}
+	},
+	computed: {
+		isSearchResult: function() {
+			return Tasker.searchTask(this.task, this.searchInput);
 		}
 	}
 });

@@ -2,6 +2,16 @@ if(typeof Tasker == 'undefined') {
 	Tasker = {};
 }
 
+if(typeof Tasker.registry == 'undefined') {
+	Tasker.registry = {
+		searchInput: ''
+	};
+}
+
+Tasker.getId = function() {
+	return (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+}
+
 Tasker.stopwatch = function(time, currentTime) {
 	var end = time.end ? time.end : (currentTime ? currentTime : new Date().getTime());
 	var diff = end - time.begin;
@@ -23,13 +33,75 @@ Tasker.totalTime = function(time) {
 	}
 }
 
+Tasker.searchTask = function(task) {
+	if(!Tasker.registry.searchInput || Tasker.registry.searchInput == '')
+		return true;
+	if((task && task.title && task.title.toLowerCase().includes(Tasker.registry.searchInput.toLowerCase()) 
+		|| (task && task.description && task.description.toLowerCase().includes(Tasker.registry.searchInput.toLowerCase()))))
+		return true;
+
+	return false;
+}
+
+Tasker.cloneTask = function(task) {
+	return new Task(task.title,  task.description, Tasker.cloneTasks(task.tasks), Tasker.cloneTimes(task.times), task.created, task.due, task.deleted, task.completed);
+}
+
+Tasker.cloneTasks = function(tasks) {
+	if(tasks == []) {
+		return [];
+	}
+
+	var clonedTasks = [];
+	for(var index = 0; index < tasks.length; ++index) {
+		clonedTasks.push(Tasker.cloneTask(tasks[index]));
+	}
+	return clonedTasks;
+}
+
+Tasker.cloneTime = function(time) {
+	return new Time(time.title, time.begin, time.end);
+}
+
+Tasker.cloneTimes = function(times) {
+	if(times == []) {
+		return [];
+	}
+
+	var clonedTimes = [];
+	for(var index = 0; index < times.length; ++index) {
+		clonedTimes.push(Tasker.cloneTime(times[index]));
+	}
+	return clonedTimes;
+}
+
+Tasker.taskPath = function(task, tasks) {
+	console.log("Looking for ", task.title);
+	var path = [];
+	for(var index = 0; index < tasks.length; ++index) {
+		if(task.id == tasks[index].id) {
+			console.log("Found the actual task", tasks[index].title);
+			return [tasks[index]];
+		}else {
+			var returnedPath = Tasker.taskPath(task, tasks[index].tasks);
+			if(returnedPath.length > 0) {
+				console.log("Prepending this task", task.title);
+				path.push(tasks[index]);
+				return path.concat(returnedPath);
+			}
+		}
+	}
+	
+	return path;
+}
+
 Number.prototype.pad = function(size) {
     var s = String(this);
     while (s.length < (size || 2)) {s = "0" + s;}
     return s;
 }
 
-Time = function(title, begin, end) {
+Time = function(title, begin, end, id) {
 	if(typeof title == 'undefined' || title == '') {
 		this.title = "New time log entry . . .";
 	}else {
@@ -47,9 +119,19 @@ Time = function(title, begin, end) {
 	}else {
 		this.end = end;
 	}
+
+	if(typeof id == 'undefined') {
+		this.id = Tasker.getId();
+	}else {
+		this.id = id;
+	}
+
+	this.elapsed = function() {
+		return "HEYO";
+	}
 }
 
-Task = function(title, description, tasks, times, created, due, deleted, completed) {
+Task = function(title, description, tasks, times, created, due, deleted, completed, id) {
 	// Tasks have:
 	// title - string
 	// description - string - markdown
@@ -87,23 +169,28 @@ Task = function(title, description, tasks, times, created, due, deleted, complet
 	}
 	
 	if(typeof due == 'undefined' || due == null) {
-		this.due = new Date().getTime();
+		this.due = null;
 	}else {
 		this.due = due;
 	}
 	
-	if(typeof deleted == 'undefined' || deleted.length == 0) {
+	if(typeof deleted == 'undefined' || deleted == null) {
 		this.deleted = null;
 	}else {
 		this.deleted = deleted;
 	}
 	
-	if(typeof completed == 'undefined' || completed.length == 0) {
+	if(typeof completed == 'undefined' || completed == null) {
 		this.completed = null;
 	}else {
 		this.completed = completed;
 	}
-	
+
+	if(typeof id == 'undefined') {
+		this.id = Tasker.getId();
+	}else {
+		this.id = id;
+	}
 	
 	this.hasIncompleteChildren = function() {
 		for(var index = 0; index < this.tasks.length; ++index) {
@@ -182,6 +269,8 @@ Tasker.vue = new Vue({
 		this.autoSave();
 	},
 	methods: {
+		search: function() {
+		},
 		addTask: function() {
 			if(this.headerInput != '') {
 				var newTask = new Task(this.headerInput)
@@ -206,6 +295,7 @@ Tasker.vue = new Vue({
 		},
 		clickTask: function(task) {
 			console.log("Regular clicked", task);
+			console.log(Tasker.taskPath(task, this.tasks));
 			this.taskStack.push(task);
 		},
 		specificClickTask: function(task) {
@@ -262,6 +352,11 @@ Tasker.vue = new Vue({
 			for(var index in replace) {
 				this[index] = replace[index];
 			}
+		}
+	},
+	watch: {
+		searchInput: function() {
+			Tasker.registry.searchInput = this.searchInput;
 		}
 	}
 });
