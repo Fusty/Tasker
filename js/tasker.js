@@ -33,6 +33,23 @@ Tasker.totalTime = function(time) {
 	}
 }
 
+Tasker.hasActiveTimer = function(task) {
+	return (task.times.length > 0 && !task.times[0].end);
+}
+
+Tasker.hasActiveTimerChildren = function(task) {
+	return Tasker.hasActiveTimerChildrenRecursive(task.tasks);
+}
+
+Tasker.hasActiveTimerChildrenRecursive = function(tasks) {
+	for(var index = 0; index < tasks.length; ++index) {
+		if(Tasker.hasActiveTimer(tasks[index]) || Tasker.hasActiveTimerChildren(tasks[index]))
+			return true;
+	}
+	return false;
+}
+
+
 Tasker.searchTask = function(task) {
 	if(!Tasker.registry.searchInput || Tasker.registry.searchInput == '')
 		return true;
@@ -44,7 +61,7 @@ Tasker.searchTask = function(task) {
 }
 
 Tasker.cloneTask = function(task) {
-	return new Task(task.title,  task.description, Tasker.cloneTasks(task.tasks), Tasker.cloneTimes(task.times), task.created, task.due, task.deleted, task.completed);
+	return new Task(task.title,  task.description, Tasker.cloneTasks(task.tasks), Tasker.cloneTimes(task.times), task.created, task.due, task.deleted, task.completed, task.id);
 }
 
 Tasker.cloneTasks = function(tasks) {
@@ -76,16 +93,13 @@ Tasker.cloneTimes = function(times) {
 }
 
 Tasker.taskPath = function(task, tasks) {
-	console.log("Looking for ", task.title);
 	var path = [];
 	for(var index = 0; index < tasks.length; ++index) {
 		if(task.id == tasks[index].id) {
-			console.log("Found the actual task", tasks[index].title);
 			return [tasks[index]];
 		}else {
 			var returnedPath = Tasker.taskPath(task, tasks[index].tasks);
 			if(returnedPath.length > 0) {
-				console.log("Prepending this task", task.title);
 				path.push(tasks[index]);
 				return path.concat(returnedPath);
 			}
@@ -200,6 +214,14 @@ Task = function(title, description, tasks, times, created, due, deleted, complet
 	}else {
 		this.id = id;
 	}
+
+	this.hasActiveTimer = function() {
+		Tasker.hasActiveTimer(this);
+	}
+
+	this.hasActiveTimerChildren = function() {
+		Tasker.hasActiveTimer(this);
+	}
 	
 	this.hasIncompleteChildren = function() {
 		for(var index = 0; index < this.tasks.length; ++index) {
@@ -271,13 +293,16 @@ Tasker.vue = new Vue({
 		headerInput: '',
 		taskStack: new TaskStack(),
 		autoSaveEnabled: true,
-		searchInput: ''
+		searchInput: '',
 	}},
 	beforeMount: function(){
 		this.loadFromStorage();
-		this.autoSave();
+		setInterval(this.autoSave, 2000);
 	},
 	methods: {
+		exportData: function() {
+			console.log(JSON.stringify(this.$data));
+		},
 		search: function() {
 		},
 		addTask: function() {
@@ -303,12 +328,9 @@ Tasker.vue = new Vue({
 			}
 		},
 		clickTask: function(task) {
-			console.log("Regular clicked", task);
-			console.log(Tasker.taskPath(task, this.tasks));
 			this.taskStack.push(task);
 		},
 		specificClickTask: function(task) {
-			console.log("Specific clicked", task);
 			this.taskStack.push(task);
 		},
 		clearTaskFromStack: function(task) {
@@ -325,8 +347,7 @@ Tasker.vue = new Vue({
 				if(data)
 				for(var index in data) {
 					if(index == 'taskStack') {
-						console.log(data[index]);
-						this.taskStack = new TaskStack(data[index].tasks);
+						this.taskStack = new TaskStack();
 					}else {
 						this[index] = data[index];
 					}
@@ -338,10 +359,6 @@ Tasker.vue = new Vue({
 		autoSave: function() {
 			if(this.autoSaveEnabled) {
 				this.saveToStorage();
-				var vm = this;
-				setTimeout(function(){
-					vm.autoSave();
-				}, 2000);
 			}
 		},
 		saveToStorage: function() {

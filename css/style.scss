@@ -1,7 +1,9 @@
+// Pallette here, https://coolors.co/dd7373-3b3561-ead94c-d1d1d1-51a3a3
 $dark1: #3B3561;
 $light1: #EAD94C;
 $light2: #51A3A3;
 $neutral1: #D1D1D1;
+$neutral2: #eded80;
 $danger1: #DD7373;
 $white: white;
 
@@ -23,16 +25,35 @@ body {
 	color: $white;
 }
 
-#app>main {
-	margin: 1rem;
+#app {
+	min-height: 100vh;
+	display: flex;
+	flex-flow: column nowrap;
+	
+	&>header {
+		flex: 0 0 auto;
+	}
+	
+	&>main {
+		margin: 1rem;
+		flex: 1 0 auto;
+	}
+	
+	&>footer {
+		background: darken($dark1, 10%);
+		height: 8rem;
+		padding: 1rem;
+		flex: 0 0 auto;
+	}
 }
+
 
 ul {
 	-webkit-margin-before: 0px;
 	-webkit-margin-after: 0px;
 }
 
-.no-padding-start {
+.is-list-root {
 	-webkit-padding-start: 0px;
 }
 
@@ -45,7 +66,7 @@ input {
 	
 	&.light2 {
 		color: $light2;
-		border-bottom: 2px dashed darken($light2, 30%);
+		border-bottom: 2px dashed darken($light2, 10%);
 		&::placeholder {
 			color: darken($light2, 10%);
 		}
@@ -76,6 +97,10 @@ input {
 	&.more-margin {
 		margin-top: 0.75rem;
 		margin-bottom: 0.75rem;
+	}
+	
+	&.no-border {
+		border: none;
 	}
 }
 
@@ -127,8 +152,13 @@ input {
 		justify-content: space-around;
 		align-items: baseline;
 		
+		a {
+			text-decoration: none;
+		}
+		
 		@media(min-width: $breakpoint-small) {
 			.logo {
+				height: 5rem;
 				display: block;
 				flex: 0 0 auto;
 				background: $danger1;
@@ -137,7 +167,7 @@ input {
 				font-weight: bold;
 				padding: 1rem 2rem 1rem 2rem;
 			}
-
+			
 			.logo-sm {
 				display: none;
 			}
@@ -153,10 +183,27 @@ input {
 						color: darken($light1, 20%);
 					}
 				}	min-width: 17rem;
-
+				
+			}
+			
+			.export-data {
+				height: 5rem;
+				display: block;
+				flex: 0 0 auto;
+				background: $danger1;
+				color: $light1;
+				font-size: 2.5rem;
+				font-weight: bold;
+				padding: 1rem 2rem 1rem 2rem;
+				align-self: stretch;
+				border: none;
+				border-radius: 0px;
+				&:hover {
+					background: darken($danger1, 10%);
+				}
 			}
 		}
-
+		
 		@media(max-width: $breakpoint-small) {
 			.logo {
 				display: none;
@@ -198,10 +245,10 @@ input {
 	list-style: none;
 	
 	.task-list-item {
-		padding: 0.5rem 0 0.5rem 0;
+		padding: 0.5rem 0 0 0;
 		font-weight: bold;
 		border-radius: $border-radius;
-		line-height: 2rem;
+		cursor: pointer;
 		
 		.sub-task-count {
 			padding: 0.5rem 0.725rem 0.5rem 0.725rem;
@@ -214,8 +261,18 @@ input {
 			padding: 0.5rem 0.725rem 0.5rem 0.725rem;
 			background: $light1;
 			color: $dark1;
-			border-top-right-radius: .25rem;
-			border-bottom-right-radius: .25rem;
+			// border-top-right-radius: .25rem;
+			// border-bottom-right-radius: .25rem;
+		}
+		.stopwatch {
+			position: relative;
+			top: 0.1rem;
+			font-size: 1.25rem;
+			color: $danger1;
+			small {
+				font-size: 1.25rem;
+				margin-left: 0.5rem;
+			}
 		}
 	}
 }
@@ -229,6 +286,7 @@ button {
 	color: $dark1;
 	font-weight: bold;
 	outline: none;
+	cursor: pointer;
 	
 	&:hover {
 		background: darken($neutral1, 15%);
@@ -312,50 +370,51 @@ button {
 	}
 }
 
-.border-group-horizontal {
+.border-group {
 	display: flex;
-	flex-direction: row;
 	
-	&>*:first-child {
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
+	&.border-group--horizontal {
+		flex-direction: row;
+		&>*:first-child {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+		
+		&>*:not(:first-child):not(:last-child) {
+			border-radius: 0;
+		}
+		
+		&>*:last-child {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+		
+		&>*:only-child {
+			border-radius: $border-radius;
+		}
 	}
 	
-	&>*:not(:first-child):not(:last-child) {
-		border-radius: 0;
+	&.border-group--vertical {
+		flex-direction: column;
+		&>*:first-child {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+		
+		&>*:not(:first-child):not(:last-child) {
+			border-radius: 0;
+		}
+		
+		&>*:last-child {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+		
+		&>*:only-child {
+			border-radius: $border-radius;
+		}
 	}
 	
-	&>*:last-child {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
-	
-	&>*:only-child {
-		border-radius: $border-radius;
-	}
-}
-
-.border-group-vertical {
-	display: flex;
-	flex-direction: column;
-	
-	&>*:first-child {
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	
-	&>*:not(:first-child):not(:last-child) {
-		border-radius: 0;
-	}
-	
-	&>*:last-child {
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
-	}
-	
-	&>*:only-child {
-		border-radius: $border-radius;
-	}
 }
 
 .centered-row {
@@ -384,7 +443,9 @@ button {
 	margin-bottom: 0.25rem;
 }
 
+// TODO: Move outlines to elements 
 .task-description {
+	outline: none;
 	width: 100%;
 	font-size: 1.5rem;
 	background: none;
@@ -401,9 +462,51 @@ button {
 
 .stopwatch {
 	font-size: 3rem;
-	color: $danger1;
+	color: $light1;
 	
 	&.timer-in-progress {
-		color: $light1;
+		color: $danger1;
+	}
+}
+
+.task-title-tip {
+	position: relative;
+	left: -0.05rem;
+	padding-top: 0.6rem;
+	overflow: visible;
+	zoom: 1;
+	.pencil-wood {
+		fill: lighten($light1, 10%);
+	}
+	.pencil-lead {
+		fill: desaturate($dark1, 25%);
+	}
+	.pencil-lead.timer-active-children {
+		fill: $light2;
+	}
+	.pencil-lead.timer-active {
+		fill: $danger1;
+	}
+	.pencil-lead.show-children {
+		transform: rotate(0.25turn) translateY(-2.6rem);
+	}
+}
+
+.task-list-empty {
+	width: 100%;
+	.empty-list-drag-area {
+		height: 2.5rem;
+		.empty-drag-area {
+			position: relative;
+			top: 0.825rem;
+			width: 16rem;
+			color: $neutral2;
+			border: 2px dashed $neutral2;
+			padding: 0.5rem;
+			
+			input {
+				width: 16rem;
+			}
+		}
 	}
 }

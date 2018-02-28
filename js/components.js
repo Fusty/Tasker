@@ -11,15 +11,14 @@ Tasker.dateFilter = Vue.filter('date', function(value, format){
 
 Tasker.truncate = Vue.filter('truncate', function(value, length, append){
 	if(value.length < length) {
-		return value;
+		return value.trim();
 	}else {
 		if(typeof append == 'undefined')
 			append = '';
 		// Find first index of whitespace before length limit
-		var negativeIndex = value.split("").reverse().join("").search(/\s/);
-		console.log("Found whitespace at index ", negativeIndex, "In string", value.split().reverse().join(""))
-		var index = value.length - (negativeIndex > 0 ? negativeIndex : 0);
-		return value.substring(0, index).trim() + append;
+		var negativeIndex = value.substring(0,length).split("").reverse().join("").search(/\s/);
+		var index = value.substring(0,length).length - (negativeIndex > 0 ? negativeIndex : 0);
+		return value.substring(0,length).substring(0, index).trim() + append;
 	}
 });
 
@@ -68,7 +67,6 @@ Tasker.taskCard = Vue.component('task-card', {
 			this.$emit('clear-task-from-stack', this.task);
 		},
 		deleteTask: function() {
-			console.log("Delete click");
 			this.showDelete = true;
 		},
 		deleteTaskCancel: function(){
@@ -79,7 +77,6 @@ Tasker.taskCard = Vue.component('task-card', {
 			this.showDelete = false;
 		},
 		onChange: function(data){
-			console.log(data);
 			return false;
 			if(data.added) {
 				if(this.task.containsTask(data.added.element))
@@ -107,12 +104,24 @@ Tasker.taskList = Vue.component('task-list', {
 	props: {
 		tasks: Array,
 		showChildren: Boolean,
-		noPaddingStart: {
+		isListRoot: {
 			type: Boolean,
 			default: false
 		}
 	},
+	data: function(){return {
+		newTaskTitle: ''
+	}},
 	mixins: [Tasker.taskSearchWatcher],
+	methods: {
+		newTask: function() {
+			console.log("New task called");
+			if(this.newTaskTitle.length > 0) {
+				this.tasks.push(new Task(this.newTaskTitle));
+				this.newTaskTitle = '';
+			}
+		}
+	},
 	computed: {
 		dragZone: function() {
 			if(this.tasks.length == 0) {
@@ -122,7 +131,6 @@ Tasker.taskList = Vue.component('task-list', {
 			}
 		},
 		inflate: function() {
-			console.log("Called");
 			if(this.tasks.length == 0) {
 				return {'inflate': true};
 			}else {
@@ -137,11 +145,16 @@ Tasker.taskListItem = Vue.component('task-list-item', {
 	props: ['task'],
 	mixins: [Tasker.taskSearchWatcher],
 	data: function(){return {
-		showChildren: false
+		showChildren: false,
+		currentTime: new Date().getTime(),
+		stopwatch: ''
 	}},
+	mounted: function(){
+		// Repeat every second
+		setInterval(this.updateTime,1000);
+	},
 	methods: {
 		toggleChildren: function() {
-			if(this.task.tasks && this.task.tasks.length > 0)
 			this.showChildren = !this.showChildren;
 		},
 		clickTask: function() {
@@ -149,11 +162,33 @@ Tasker.taskListItem = Vue.component('task-list-item', {
 		},
 		specificClickTask: function() {
 			this.$emit('specific-click-task', this.task);
+		},
+		updateTime: function() {
+			this.currentTime = new Date().getTime();
+			if(Tasker.hasActiveTimer(this.task)) {
+				this.stopwatch = Tasker.stopwatch(this.task.times[0], this.currentTime).join(":");
+				this.totalTime = Tasker.totalTime(this.task.times[0]);
+			}else {
+				this.stopwatch = '00:00:00';
+			}
 		}
 	},
 	computed: {
 		isSearchResult: function() {
 			return Tasker.searchTask(this.task, this.searchInput);
+		},
+		timerTitle: function() {
+			if(this.task.times.length == 0) {
+				return ''
+			}else {
+				return this.task.times[0].title;
+			}
+		},
+		hasActiveTimer: function() {
+			return Tasker.hasActiveTimer(this.task);
+		},
+		hasActiveTimerChildren: function() {
+			return Tasker.hasActiveTimerChildren(this.task);
 		}
 	}
 });
@@ -181,7 +216,8 @@ Tasker.taskCardTimer = Vue.component('task-card-timer', {
 		totalTime: '',
 	}},
 	mounted: function(){
-		this.updateTime();
+		// Repeat every second
+		setInterval(this.updateTime,1000);
 	},
 	methods: {
 		startTimer: function() {
@@ -198,12 +234,6 @@ Tasker.taskCardTimer = Vue.component('task-card-timer', {
 			}else {
 				this.stopwatch = '00:00:00';
 			}
-
-			// Repeat every second
-			var vm = this;
-			setTimeout(function(){
-				vm.updateTime();
-			},1000);
 		},
 		continuePrevious: function() {
 			this.times.unshift(new Time(this.times[0].title));
