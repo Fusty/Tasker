@@ -94,7 +94,7 @@
     <ul class="task-list" :class="{'is-list-root': isListRoot, 'task-list-empty': tasks.length == 0}">
         <draggable element="div" :list="tasks" :component-data="{newTask}" :options="{group: 'tasks'}" v-show="showChildren" class="empty-list-drag-area">
             <task-list-item v-for="(task, index) in tasks" v-if="conditionalResult(task)" :key="task.id" :task="task" :search-input="searchInput" @click-task="inTask => $emit('click-task', inTask)" @specific-click-task="inTask => $emit('specific-click-task', inTask)" ></task-list-item>
-            <div class="empty-drag-area" v-show="tasks.length == 0" v-if="condition != showCompletes">
+            <div class="empty-drag-area" v-show="tasks.length == 0" v-if="condition !== 'showCompletes' || condition !== 'showIncompletes'">
                 <input class="light1 no-border" type="text" v-model="newTaskTitle" @keyup.enter="newTask()" :placeholder="isListRoot ? 'Type a Task Title to get started':'Type Sub-Task Title or Drag Task Here'"/>
             </div>
         </draggable>
