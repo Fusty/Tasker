@@ -49,6 +49,33 @@ Tasker.hasActiveTimerChildrenRecursive = function(tasks) {
 	return false;
 }
 
+Tasker.isComplete = function(task) {
+	return (task.completed);
+}
+
+Tasker.hasIncompleteChildren = function(task) {
+	return Tasker.hasIncompleteChildrenRecursive(task.tasks);
+}
+
+Tasker.hasIncompleteChildrenRecursive = function(tasks) {
+	for(var index = 0; index < tasks.length; ++index) {
+		if(!Tasker.isComplete(tasks[index]) || Tasker.hasIncompleteChildren(tasks[index]))
+			return true;
+	}
+	return false;
+}
+
+Tasker.hasCompleteChildren = function(task) {
+	return Tasker.hasCompleteChildrenRecursive(task.tasks);
+}
+
+Tasker.hasCompleteChildrenRecursive = function(tasks) {
+	for(var index = 0; index < tasks.length; ++index) {
+		if(!Tasker.isComplete(tasks[index]) || !Tasker.hasCompleteChildren(tasks[index]))
+			return false;
+	}
+	return true;
+}
 
 Tasker.searchTask = function(task) {
 	if(!Tasker.registry.searchInput || Tasker.registry.searchInput == '')
@@ -281,15 +308,7 @@ TaskStack = function(tasks) {
 Tasker.vue = new Vue({
 	el: "#app",
 	data: function(){return {
-		test: "Hello World",
-		tasks: [
-			new Task("Create a time tracking task managment application", "Create a website that can organize tasks and track the time it takes to complete each", [
-				new Task("Create a way to add tasks to the main list", "Like from the navbar or something"),
-				new Task("Create a way to add tasks to existing tasks", "Like from the task stack on the right"),
-				new Task("Create a way to show task stack on the right", "Like cards stacked on the right"),
-			]),
-			new Task("Make the app really good", "Don't just make it some lame piece of crap")
-		],
+		tasks: [],
 		headerInput: '',
 		taskStack: new TaskStack(),
 		autoSaveEnabled: true,
@@ -310,7 +329,7 @@ Tasker.vue = new Vue({
 				var newTask = new Task(this.headerInput)
 				this.tasks.unshift(newTask);
 				this.headerInput = '';
-				this.clickTask(newTask);
+				this.focusTask(newTask);
 			}
 		},
 		deleteTask: function(task) {
@@ -327,7 +346,7 @@ Tasker.vue = new Vue({
 				}
 			}
 		},
-		clickTask: function(task) {
+		focusTask: function(task) {
 			this.taskStack.push(task);
 		},
 		specificClickTask: function(task) {
@@ -378,6 +397,14 @@ Tasker.vue = new Vue({
 			for(var index in replace) {
 				this[index] = replace[index];
 			}
+		}
+	},
+	computed: {
+		hasIncompleteChildren: function() {
+			return Tasker.hasIncompleteChildrenRecursive(this.tasks);
+		},
+		hasCompleteChildren: function() {
+			return Tasker.hasCompleteChildrenRecursive(this.tasks);
 		}
 	},
 	watch: {

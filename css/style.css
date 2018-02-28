@@ -26,6 +26,7 @@ body {
 
 #app > footer {
   background: #272340;
+  color: #EAD94C;
   height: 8rem;
   padding: 1rem;
   flex: 0 0 auto;
@@ -64,6 +65,15 @@ input.light1 {
 
 input.light1::placeholder {
   color: #baa816;
+}
+
+input.danger1 {
+  color: #DD7373;
+  border-bottom: 2px dashed #DD7373;
+}
+
+input.danger1::placeholder {
+  color: #bc2e2e;
 }
 
 input.blue {
@@ -122,6 +132,10 @@ input.no-border {
 
 .min-width-18 {
   min-width: 18rem;
+}
+
+.min-width-17 {
+  min-width: 17rem;
 }
 
 #app > header {
@@ -217,14 +231,14 @@ input.no-border {
   list-style: none;
 }
 
-.task-list .task-list-item {
+.task-list-item {
   padding: 0.5rem 0 0 0;
   font-weight: bold;
   border-radius: 0.25rem;
   cursor: pointer;
 }
 
-.task-list .task-list-item .sub-task-count {
+.task-list-item .sub-task-count {
   padding: 0.5rem 0.725rem 0.5rem 0.725rem;
   background: #DD7373;
   color: #3B3561;
@@ -232,22 +246,112 @@ input.no-border {
   border-bottom-left-radius: .25rem;
 }
 
-.task-list .task-list-item .task-title {
+.task-list-item .task-title {
   padding: 0.5rem 0.725rem 0.5rem 0.725rem;
   background: #EAD94C;
   color: #3B3561;
 }
 
-.task-list .task-list-item .stopwatch {
+.task-list-item .stopwatch {
   position: relative;
   top: 0.1rem;
   font-size: 1.25rem;
   color: #DD7373;
 }
 
-.task-list .task-list-item .stopwatch small {
+.task-list-item .stopwatch small {
   font-size: 1.25rem;
   margin-left: 0.5rem;
+}
+
+.task-list-item .task-title-tip {
+  position: relative;
+  left: -0.05rem;
+  padding-top: 0.6rem;
+  overflow: visible;
+  zoom: 1;
+}
+
+.task-list-item .task-title-tip .pencil-wood {
+  fill: #efe37a;
+}
+
+.task-list-item .task-title-tip .pencil-lead {
+  fill: #49484e;
+}
+
+.task-list-item .task-title-tip .pencil-lead.timer-active-children {
+  fill: #51A3A3;
+}
+
+.task-list-item .task-title-tip .pencil-lead.timer-active {
+  fill: #DD7373;
+}
+
+.task-list-item .task-title-tip .pencil-lead.show-children {
+  transform: rotate(0.25turn) translateY(-2.6rem);
+}
+
+.task-list-item.big {
+  zoom: 200%;
+  padding: 0;
+  position: relative;
+  top: -1.5rem;
+  display: flex;
+  align-items: stretch;
+  margin-bottom: -1rem;
+}
+
+.task-list-item.big .task-title-tip {
+  top: -0.55rem;
+  left: 0.333rem;
+  zoom: 0.8;
+  align-self: center;
+}
+
+.task-list-item.big .task-title {
+  width: 85%;
+  font-weight: bold;
+  outline: none;
+  border: none;
+  resize: none;
+  border-bottom: 2px dashed #3B3561;
+}
+
+.task-list-item.big .stopwatch {
+  display: none;
+}
+
+.task-list-item.is-complete > .sub-task-count {
+  opacity: 0.25;
+}
+
+.task-list-item.is-complete > .task-title {
+  opacity: 0.25;
+}
+
+.task-list-item.is-complete > .task-title-tip {
+  opacity: 0.25;
+}
+
+.task-list-item.is-complete > .stopwatch {
+  opacity: 0.25;
+}
+
+.task-list-item.is-complete.has-incomplete-children > .sub-task-count {
+  opacity: 0.5;
+}
+
+.task-list-item.is-complete.has-incomplete-children > .task-title {
+  opacity: 0.5;
+}
+
+.task-list-item.is-complete.has-incomplete-children > .task-title-tip {
+  opacity: 0.5;
+}
+
+.task-list-item.is-complete.has-incomplete-children > .stopwatch {
+  opacity: 0.5;
 }
 
 button {
@@ -434,53 +538,25 @@ button.full-width {
   width: 100%;
   font-size: 1.5rem;
   background: none;
-  color: #51A3A3;
+  color: #EAD94C;
   border: none;
-  border-left: 2px dashed #51A3A3;
-  border-bottom: 2px dashed #51A3A3;
+  border-left: 2px dashed #EAD94C;
+  border-bottom: 2px dashed #EAD94C;
   margin-top: 1rem;
   padding: 0.5rem;
 }
 
 .task-description::placeholder {
-  color: #408181;
+  color: #e5cf1e;
 }
 
 .stopwatch {
-  font-size: 3rem;
-  color: #EAD94C;
+  font-size: 2.5rem;
+  color: #51A3A3;
 }
 
 .stopwatch.timer-in-progress {
   color: #DD7373;
-}
-
-.task-title-tip {
-  position: relative;
-  left: -0.05rem;
-  padding-top: 0.6rem;
-  overflow: visible;
-  zoom: 1;
-}
-
-.task-title-tip .pencil-wood {
-  fill: #efe37a;
-}
-
-.task-title-tip .pencil-lead {
-  fill: #49484e;
-}
-
-.task-title-tip .pencil-lead.timer-active-children {
-  fill: #51A3A3;
-}
-
-.task-title-tip .pencil-lead.timer-active {
-  fill: #DD7373;
-}
-
-.task-title-tip .pencil-lead.show-children {
-  transform: rotate(0.25turn) translateY(-2.6rem);
 }
 
 .task-list-empty {
@@ -494,13 +570,50 @@ button.full-width {
 .task-list-empty .empty-list-drag-area .empty-drag-area {
   position: relative;
   top: 0.825rem;
-  width: 16rem;
+  width: 17rem;
   color: #eded80;
   border: 2px dashed #eded80;
   padding: 0.5rem;
 }
 
 .task-list-empty .empty-list-drag-area .empty-drag-area input {
-  width: 16rem;
+  width: 17rem;
+  font-weight: bold;
+}
+
+.sub-task-input {
+  width: 15rem;
+  font-weight: bold;
+  color: #eded80;
+  border: 2px dashed #eded80;
+  padding: 0.5rem;
+}
+
+.light1 {
+  color: #EAD94C;
+}
+
+.margin-bottom-0_5 {
+  margin-bottom: 0.5rem;
+}
+
+.task-list-separator {
+  border: none;
+  border-bottom: 2px dashed #13111f;
+  margin-top: 1rem;
+  margin-bottom: -0.5rem;
+  margin-left: 0;
+  width: 85%;
+}
+
+.no-complete-tasks, .no-incomplete-tasks, .empty-task-stack {
+  width: 85%;
+  border: 2px dashed #13111f;
+  border-radius: 0.25rem;
+  padding: 2rem;
+  margin: 1rem 0 0 0;
+  color: #51A3A3;
+  font-weight: bold;
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */
