@@ -2,12 +2,6 @@ if(typeof Tasker == 'undefined') {
 	Tasker = {};
 }
 
-if(typeof Tasker.registry == 'undefined') {
-	Tasker.registry = {
-		searchInput: ''
-	};
-}
-
 Tasker.getId = function() {
 	return (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
 }
@@ -181,6 +175,19 @@ Time = function(title, begin, end, id) {
 	}
 }
 
+Tasker.timesFromObjectArray = function(times) {
+	var realTimes = [];
+	times.forEach(function(timeObject) {
+		realTimes.push(new Time(
+			timeObject.title,
+			timeObject.begin,
+			timeObject.end,
+			timeObject.id
+		));
+	});
+	return realTimes;
+}
+
 Task = function(title, description, tasks, times, created, due, deleted, completed, id) {
 	// Tasks have:
 	// title - string
@@ -209,7 +216,7 @@ Task = function(title, description, tasks, times, created, due, deleted, complet
 	if(typeof times == 'undefined' || times.length == 0) {
 		this.times = [];
 	}else {
-		this.times = times;
+		this.times = Tasker.timesFromObjectArray(times);
 	}
 	
 	if(typeof created == 'undefined' || created == null) {
@@ -282,6 +289,24 @@ Task = function(title, description, tasks, times, created, due, deleted, complet
 	}
 }
 
+Tasker.tasksFromObjectArray = function(tasks) {
+	var realTasks = [];
+	tasks.forEach(function(taskObject) {
+		realTasks.push(new Task(
+			taskObject.title,
+			taskObject.description,
+			taskObject.tasks,
+			taskObject.times,
+			taskObject.created,
+			taskObject.due,
+			taskObject.deleted,
+			taskObject.completed,
+			taskObject.id
+		));
+	});
+	return realTasks;
+}
+
 TaskStack = function(tasks) {
 	if(typeof tasks != 'undefined') {
 		this.tasks = tasks;
@@ -289,7 +314,7 @@ TaskStack = function(tasks) {
 		this.tasks = []		
 	}
 	
-	this.push = function(task) {
+	this.push = function(task) {Array[1]
 		if(this.tasks.indexOf(task) > -1)
 		this.tasks.splice(this.tasks.indexOf(task), 1);
 		this.tasks.unshift(task);
@@ -312,13 +337,35 @@ Tasker.vue = new Vue({
 		headerInput: '',
 		taskStack: new TaskStack(),
 		autoSaveEnabled: true,
-		searchInput: '',
+		history: [],
 	}},
+	store,
 	beforeMount: function(){
 		this.loadFromStorage();
-		setInterval(this.autoSave, 2000);
+		setInterval(this.autoSave, 10000);
+	},
+	mounted: function() {
+		setTimeout(function(){GoogleSheets.initClient();},100);
 	},
 	methods: {
+		handleAuthClick: function(event) {
+			GoogleSheets.handleAuthClick(event);
+		},
+		handleSignoutClick: function(event) {
+			GoogleSheets.handleSignoutClick(event);
+		},
+		historyEvent: function(item) {
+			if(item.type.startsWith('undo')) {
+				if(item.type.startsWith('undo.task')) {
+					if(item.type.startsWith('undo.task.delete')) {
+						this.undoTaskDelete(item.task);
+					}
+				}
+			}
+		},
+		undoTaskDelete: function(task) {
+			this.tasks.push(task);
+		},
 		exportData: function() {
 			console.log(JSON.stringify(this.$data));
 		},
@@ -335,6 +382,11 @@ Tasker.vue = new Vue({
 		deleteTask: function(task) {
 			this.deleteTaskRecursive(task, this.tasks);
 			this.clearTaskFromStack(task);
+			this.history.push({
+				type: 'undo.task.delete',
+				task: task,
+				time: new Date().getTime()
+			});
 		},
 		deleteTaskRecursive: function(task, tasks) {
 			for(var index = 0; index < tasks.length; ++index) {
@@ -367,6 +419,8 @@ Tasker.vue = new Vue({
 				for(var index in data) {
 					if(index == 'taskStack') {
 						this.taskStack = new TaskStack();
+					}else if(index == 'tasks') {
+						this.tasks = Tasker.tasksFromObjectArray(data[index]);
 					}else {
 						this[index] = data[index];
 					}
@@ -406,10 +460,6 @@ Tasker.vue = new Vue({
 		hasCompleteChildren: function() {
 			return Tasker.hasCompleteChildrenRecursive(this.tasks);
 		}
-	},
-	watch: {
-		searchInput: function() {
-			Tasker.registry.searchInput = this.searchInput;
-		}
+		...Vuex.mapState(['tasks', 'taskStack'])
 	}
 });

@@ -1,0 +1,26 @@
+///////////////////////////////////////////////////////////////
+//
+//		Basically just css properties as classes.
+//		Definitely an anti-pattern.
+//		TODO:  Eliminate the need for these
+//
+///////////////////////////////////////////////////////////////
+.min-width-18 {
+	min-width: 18rem;
+}
+
+.min-width-17 {
+	min-width: 17rem;
+}
+
+.grow {
+	flex-grow: 1;
+}
+
+.margin-top-1 {
+	margin-top: 1rem;
+}
+
+.margin-bottom-0_5 {
+	margin-bottom: 0.5rem;
+}

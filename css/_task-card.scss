@@ -1,0 +1,39 @@
+.task-card {
+	padding: 0.25rem;
+	border: 2px solid $danger1;
+	border-radius: $border-radius;
+	
+	main {
+		margin: 2rem 3rem 2rem 2rem;
+	}
+}
+
+.bread-crumbs {
+	color: lighten($dark1, 25%); 
+	margin-top: 0.25rem;
+	margin-bottom: 0.25rem;
+}
+
+.task-description {
+	outline: none;
+	width: 100%;
+	font-size: 1.5rem;
+	background: none;
+	color: $light1;
+	border: none;
+	border-left: 2px dashed $light1;
+	border-bottom: 2px dashed $light1;
+	margin-top: 1rem;
+	padding: 0.5rem;
+	&::placeholder {
+		color: darken($light1, 10%);
+	}
+}
+
+.sub-task-input {
+	width: 15rem;
+	font-weight: bold;
+	color: $neutral2;
+	border: 2px dashed $neutral2;
+	padding: 0.5rem;
+}

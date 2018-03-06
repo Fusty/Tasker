@@ -1,0 +1,38 @@
+.poptart {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
+	
+	min-width: 100vw;
+	min-height: 100vh;
+	pointer-events: none;
+
+	.poptart-spacer {
+		flex: 1 0 auto;
+	}
+
+	.poptart-content {
+		flex: 0 0 auto;
+		pointer-events: all;
+
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: center;
+
+
+		ul {
+			width: 30rem;
+			padding: 0.75rem;
+			background: darken($dark1, 20%);
+			list-style: none;
+			color: $light2;
+
+			text-align: center;
+		}
+
+	}
+}

@@ -45,26 +45,9 @@ Tasker.truncate = Vue.filter('truncate', function(value, length, append){
 	}
 });
 
-Tasker.taskSearchWatcher = {
-	props: ['searchInput'],
-	computed: {
-		isSearchResult: function() {
-			return Tasker.searchTask(this.task, this.searchInput.slice(0).trim());
-		}
-	},
-	watch: {
-		searchInput: function() {
-			if(this.task && this.searchInput != '') {
-				this.showChildren = true;
-			}
-		}
-	}
-}
-
 Tasker.taskCard = Vue.component('task-card', {
 	template: '#task-card',
 	props: ['task', 'tasks'],
-	mixins: [Tasker.taskSearchWatcher],
 	data: function(){return {
 		showDelete: false,
 		newTaskTitle: '',
@@ -122,6 +105,71 @@ Tasker.taskCard = Vue.component('task-card', {
 	}
 });
 
+Tasker.poptart = Vue.component('poptart', {
+	template: '#poptart',
+	props: {
+		history: Array
+	},
+	data: function(){return {
+		hasUnexpired: false
+	}},
+	mounted: function() {
+		setInterval(this.checkExpired, 1000);
+	},
+	methods: {
+		checkExpired: function(){
+			var hasUnexpired = false;
+			for(var index = 0; index < this.history.length; ++index) {
+				if(this.isExpired(this.history[index])) {
+					this.history.splice(index, 1);
+				}else {
+					hasUnexpired = true;
+				}
+			}
+
+			this.hasUnexpired = hasUnexpired;
+		},
+		isExpired: function(item) {
+			if(new Date().getTime() - item.time > 10000 ) {
+				return true;
+			}
+			return false;
+		},
+		historyEvent: function(item) {
+			this.$emit('history-event', item);
+			this.removeItem(item);
+		},
+		removeItem: function(item) {
+			for(var index = 0; index < this.history.length; ++index) {
+				if(item === this.history[index]) {
+					this.history.splice(index, 1);
+				}
+			}
+		},
+		message: function(item) {
+			if(item.type.startsWith('undo')) {
+				if(item.type.startsWith('undo.task')) {
+					if(item.type.startsWith('undo.task.delete')) {
+						return "Task '" +
+						this.$options.filters.truncate(item.task.title, 20) +
+						"' was deleted";
+					}
+				}
+			}
+		},
+		itemClass: function(item) {
+			if(item.type.startsWith('undo')) {
+				return ['light1', 'outline']
+			}
+		},
+		buttonText: function(item) {
+			if(item.type.startsWith('undo')) {
+				return 'undo'
+			}
+		}
+	}
+})
+
 Tasker.taskList = Vue.component('task-list', {
 	template: '#task-list',
 	props: {
@@ -139,7 +187,6 @@ Tasker.taskList = Vue.component('task-list', {
 	data: function(){return {
 		newTaskTitle: ''
 	}},
-	mixins: [Tasker.taskSearchWatcher],
 	methods: {
 		newTask: function() {
 			console.log("New task called");
@@ -197,7 +244,6 @@ Tasker.taskListItem = Vue.component('task-list-item', {
 			default: false
 		}
 	},
-	mixins: [Tasker.taskSearchWatcher],
 	data: function(){return {
 		showChildren: false,
 		currentTime: new Date().getTime(),
@@ -228,9 +274,6 @@ Tasker.taskListItem = Vue.component('task-list-item', {
 		}
 	},
 	computed: {
-		isSearchResult: function() {
-			return Tasker.searchTask(this.task, this.searchInput);
-		},
 		timerTitle: function() {
 			if(this.task.times.length == 0) {
 				return ''
