@@ -5,6 +5,7 @@
 @import "task-list";		// Task-list specific styles
 @import "task-card";		// Task-card specific styles
 @import "property-classes";	// Utility classes that mimic css properties
+@import "modal";	// Utility classes that mimic css properties
 
 * {
 	box-sizing : border-box;
@@ -122,9 +123,19 @@ input {
 	width: calc(100%*5/12 - #{$gutter});
 }
 
+.width-6 {
+	flex: 1 0 auto;
+	width: calc(100%*6/12 - #{$gutter});
+}
+
 .width-7 {
 	flex: 1 0 auto;
 	width: calc(100%*7/12 - #{$gutter});
+}
+
+.width-10 {
+	flex: 1 0 auto;
+	width: calc(100%*10/12 - #{$gutter});
 }
 
 .width-12 {
@@ -271,7 +282,7 @@ button {
 		}
 	}
 	
-	&.magenta {
+	&.danger1 {
 		background: $danger1;
 		border: 2px solid $danger1;
 		color: $dark1;
@@ -395,4 +406,17 @@ button {
 	color: $light2;
 	font-weight: bold;
 	text-align: center;
+}
+
+.no-left-margin {
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+.space-between {
+	justify-content: space-between;
+}
+
+.pull-right {
+	text-align: right;
 }

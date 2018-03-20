@@ -1,0 +1,57 @@
+.modal-wrap {
+	position: absolute;
+	
+	top: 0px;
+	left: 0px;
+
+	display: none;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	min-width: 100vw;
+
+	background: rgba($dark1, 0.75);
+	
+	&.active {
+		display: flex;
+	}
+
+	&:before {
+		content: "";
+		flex: 1 1 auto;
+	}
+
+	&>.modal {
+		background: rgba($dark1, 25%);
+		border-radius: $border-radius;
+		border: 2px solid darken($dark1, 10%);
+		flex: 0 0 auto;
+		display: flex;
+		flex-flow: column nowrap;
+		min-width: 50vw;
+
+		&>header {
+			margin-left: 1rem;
+			margin-right: 1rem;
+			flex: 0 0 auto;
+		}
+		
+		&>main {
+			margin: 1rem;
+			flex: 0 0 auto;
+		}
+		
+		&>footer {
+			margin: 1rem;
+			flex: 0 0 auto;
+		}
+	}
+	
+
+	&:after {
+		content: "";
+		flex: 1 1 auto;
+	}
+
+}

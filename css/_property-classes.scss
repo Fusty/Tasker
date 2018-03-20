@@ -17,6 +17,10 @@
 	flex-grow: 1;
 }
 
+.no-grow {
+	flex-grow: 0;
+}
+
 .margin-top-1 {
 	margin-top: 1rem;
 }
@@ -24,3 +28,8 @@
 .margin-bottom-0_5 {
 	margin-bottom: 0.5rem;
 }
+
+.baseline {
+	align-content: baseline;
+}
+

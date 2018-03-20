@@ -259,12 +259,73 @@
   flex-grow: 1;
 }
 
+.no-grow {
+  flex-grow: 0;
+}
+
 .margin-top-1 {
   margin-top: 1rem;
 }
 
 .margin-bottom-0_5 {
   margin-bottom: 0.5rem;
+}
+
+.baseline {
+  align-content: baseline;
+}
+
+.modal-wrap {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: none;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  background: rgba(59, 53, 97, 0.75);
+}
+
+.modal-wrap.active {
+  display: flex;
+}
+
+.modal-wrap:before {
+  content: "";
+  flex: 1 1 auto;
+}
+
+.modal-wrap > .modal {
+  background: #3b3561;
+  border-radius: 0.25rem;
+  border: 2px solid #272340;
+  flex: 0 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: 50vw;
+}
+
+.modal-wrap > .modal > header {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  flex: 0 0 auto;
+}
+
+.modal-wrap > .modal > main {
+  margin: 1rem;
+  flex: 0 0 auto;
+}
+
+.modal-wrap > .modal > footer {
+  margin: 1rem;
+  flex: 0 0 auto;
+}
+
+.modal-wrap:after {
+  content: "";
+  flex: 1 1 auto;
 }
 
 * {
@@ -386,9 +447,19 @@ input.no-border {
   width: calc(100%*5/12 - 1rem);
 }
 
+.width-6 {
+  flex: 1 0 auto;
+  width: calc(100%*6/12 - 1rem);
+}
+
 .width-7 {
   flex: 1 0 auto;
   width: calc(100%*7/12 - 1rem);
+}
+
+.width-10 {
+  flex: 1 0 auto;
+  width: calc(100%*10/12 - 1rem);
 }
 
 .width-12 {
@@ -530,23 +601,23 @@ button.light1.outline:hover {
   color: #d1bd19;
 }
 
-button.magenta {
+button.danger1 {
   background: #DD7373;
   border: 2px solid #DD7373;
   color: #3B3561;
 }
 
-button.magenta:hover {
+button.danger1:hover {
   background: #ce3535;
   border: 2px solid #ce3535;
 }
 
-button.magenta.outline {
+button.danger1.outline {
   background: none;
   color: #DD7373;
 }
 
-button.magenta.outline:hover {
+button.danger1.outline:hover {
   color: #ce3535;
 }
 
@@ -662,5 +733,18 @@ button.full-width {
   color: #51A3A3;
   font-weight: bold;
   text-align: center;
+}
+
+.no-left-margin {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.pull-right {
+  text-align: right;
 }
 /*# sourceMappingURL=style.css.map */
