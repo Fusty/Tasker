@@ -64,6 +64,9 @@
                     <div v-if="taskStack.tasks.length == 0 && tasks.length > 0">
                         <div class="empty-task-stack">Double Click on any task to view its detail</div>
                     </div>
+                    <div v-if="taskStack.tasks.length == 0 && tasks.length == 0">
+                        <div class="empty-task-stack">Create some tasks and then double click on one to view its detail</div>
+                    </div>
                 </div>
             </div>
         </main>
