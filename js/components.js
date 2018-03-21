@@ -339,7 +339,9 @@ Tasker.taskCardTiming = Vue.component("task-card-timing", {
     props: ["times", "task", "breadCrumbs"],
     data: function(){return {
         currentPageSize: 5,
-        showNestedTimes: false
+        showNestedTimes: false,
+        showTimeEditor: true,
+        editingTime: undefined,
     };},
     store,
     methods: {
@@ -401,7 +403,14 @@ Tasker.taskCardTiming = Vue.component("task-card-timing", {
         },
         closeNestedTimeReport: function() {
             this.showNestedTimes = false;            
-        }
+        },
+        openTimeEditor: function(time) {
+            this.editingTime = time;
+            this.showTimeEditor = true;
+        },
+        closeTimeEditor: function() {
+            this.showTimeEditor = false;
+        },
     },
     computed: {
         nestedTimes: function() {
@@ -419,10 +428,16 @@ Tasker.taskCardTimer = Vue.component("task-card-timer", {
         currentTime: new Date().getTime(),
         stopwatch: "",
         totalTime: "",
+        inlineData: {time: ""}
     };},
     mounted: function(){
         // Repeat every second
         setInterval(this.updateTime,1000);
+    },
+    watch: {
+        inlineData: function() {
+            console.log("Data changed!!", this.inlineData);
+        }
     },
     methods: {
         startTimer: function() {
@@ -442,6 +457,17 @@ Tasker.taskCardTimer = Vue.component("task-card-timer", {
         },
         continuePrevious: function() {
             this.times.unshift(new Time(this.times[0].title));
+        },
+        updateTempTime: function(time) {
+            console.log("Updating", time);
+            this.inlineData.time = time;
+        },
+        saveTime: function(time) {
+            var interp = Tasker.interpretTime(time);
+            console.log("New duration", interp);
+            if(typeof interp == "object") {
+                this.times[0].begin = new Date().getTime() - ((interp.hours*60*60*1000) + (interp.minutes*60*1000) + (interp.seconds*1000));
+            }
         }
     },
     computed: {
@@ -458,16 +484,26 @@ Tasker.taskCardTimer = Vue.component("task-card-timer", {
 
 Tasker.inlineEditable = Vue.component("inline-editable", {
     template: "#inline-editable",
-    props: ["preText", "postText", "fieldType", "fieldClasses", "dataFieldName", "data"],
+    props: ["preText", "postText", "fieldType", "fieldClasses", "dataFieldName", "data", "fieldSize", "showValue"],
     data: function(){return {
         editing: false,
+        oldValue: "",
     };},
     methods: {
         startEditing: function() {
             this.editing = true;
+            this.oldValue = this.value;
         },
         stopEditing: function() {
             this.editing = false;
+            this.$emit("saveValue", this.value);
+            this.oldValue = "";
+        },
+        revertEditing: function() {
+            this.editing = false;
+            this.$emit("revertValue", this.oldValue);
+            if(this.oldValue != "")
+                this.value = this.oldValue;
         }
     },
     computed: {
@@ -479,20 +515,26 @@ Tasker.inlineEditable = Vue.component("inline-editable", {
                 path.forEach(segment => {
                     subMap = this.data[segment];
                 });
+
+                if(subMap == null)
+                    subMap = this.data;
+
                 return subMap;                
             },
             set: function(value) {
                 var subMap = null;
                 var path = this.dataFieldName.split(".");
 
-                for(var index = 0; index < path.length -1; ++index) {
+                for(var index = 0; index < path.length; ++index) {
                     subMap = this.data[path[index]];
                 }
 
                 if(subMap == null)
                     subMap = this.data;
 
+
                 subMap[path[path.length -1]] = value;
+                this.$emit("updateValue", value);
             }
         }
     }

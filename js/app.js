@@ -1,3 +1,66 @@
+Tasker.interpretTime = function(input) {
+    input = input.trim();
+    if(input == "")
+        return "";
+    var hourMinuteRE = /^(\d+)\s*(hours|hour|h)\s*(\d+)\s*(minutes|minute|mins|min|m)$/;
+    var hourRE = /^(\d+)\s*(hours|hour|h)$/;
+    var minuteRE = /^(\d+)\s*(minutes|minute|min|m)$/;
+    // Test for Regex that matches something.  In decreasing specificity
+    var hours = undefined;
+    var minutes = undefined;
+
+    if(hourMinuteRE.test(input)) {
+        hours = Number(input.replace(hourMinuteRE, "$1"));
+        minutes = Number(input.replace(hourMinuteRE, "$3"));
+    }else if(hourRE.test(input)) {
+        hours = Number(input.replace(hourRE, "$1"));
+    }else if(minuteRE.test(input)) {
+        minutes = Number(input.replace(minuteRE, "$1"));
+    }
+
+    if(typeof hours == "undefined" && typeof minutes == "undefined" && input != "") {
+        return "INVALID FORMAT";
+    }
+
+    var timeObject = {};
+
+    if(hours)
+        timeObject.hours = hours;
+
+    if(minutes)
+        timeObject.minutes = minutes;
+
+    return Tasker.normalizeTimeObject(timeObject);
+};
+
+Tasker.normalizeTimeObject = function(timeObject) {
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+
+    if("seconds" in timeObject) {
+        seconds += timeObject.seconds%60;
+        minutes += Math.floor(timeObject.seconds/60);
+    }
+
+    if("minutes" in timeObject) {
+        console.log("Minutes to add", timeObject.minutes, timeObject.minutes%60);
+        minutes += timeObject.minutes%60;
+        console.log("Hours to add", timeObject.minutes, timeObject.minutes/60);
+        hours += Math.floor(timeObject.minutes/60);
+    }
+    
+    if("hours" in timeObject) {
+        hours += timeObject.hours;
+    }
+
+    return {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+    };
+};
+
 // Main vue instance
 Tasker.vue = new Vue({
     el: "#app",
@@ -6,7 +69,8 @@ Tasker.vue = new Vue({
         headerInput: "",
         // taskStack: new TaskStack(),
         autoSaveEnabled: true,
-        history: []
+        history: [],
+        timeTestInput: "",
     };},
     store,
     beforeMount: function(){
@@ -99,6 +163,9 @@ Tasker.vue = new Vue({
         },
         taskStack: function() {
             return store.state.taskStack;
+        },
+        timeTestOutput: function() {
+            return Tasker.interpretTime(this.timeTestInput);
         }
     }
 });

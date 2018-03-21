@@ -203,7 +203,7 @@ Time = function(title, begin, end, id) {
         if(this.end)
             return Tasker.timeArrayToString(Tasker.hoursMinutesSecondsFromSeconds(this.end - this.begin));
 
-        return '';
+        return "";
     };
 };
 
@@ -355,7 +355,7 @@ const store = new Vuex.Store({
         tasks: [],
         taskRelationships: [],
         taskStack: new TaskStack(),
-        saveHash: '',
+        saveHash: "",
     },
     getters: {
         topLevelTasks: state => {

@@ -437,9 +437,24 @@ input.no-border {
   flex: 0 0 auto;
 }
 
+.width-1 {
+  flex: 1 0 auto;
+  width: calc(100%*1/12 - 1rem);
+}
+
 .width-2 {
   flex: 1 0 auto;
   width: calc(100%*2/12 - 1rem);
+}
+
+.width-3 {
+  flex: 1 0 auto;
+  width: calc(100%*3/12 - 1rem);
+}
+
+.width-4 {
+  flex: 1 0 auto;
+  width: calc(100%*4/12 - 1rem);
 }
 
 .width-5 {
@@ -457,14 +472,29 @@ input.no-border {
   width: calc(100%*7/12 - 1rem);
 }
 
+.width-8 {
+  flex: 1 0 auto;
+  width: calc(100%*8/12 - 1rem);
+}
+
+.width-9 {
+  flex: 1 0 auto;
+  width: calc(100%*9/12 - 1rem);
+}
+
 .width-10 {
   flex: 1 0 auto;
   width: calc(100%*10/12 - 1rem);
 }
 
+.width-11 {
+  flex: 1 0 auto;
+  width: calc(100%*11/12 - 1rem);
+}
+
 .width-12 {
   flex: 1 0 auto;
-  width: calc(100% - 1rem);
+  width: calc(100%*12/12 - 1rem);
 }
 
 #app > header {
@@ -698,11 +728,13 @@ button.full-width {
 
 .border-group.border-group--vertical > *:not(:first-child):not(:last-child) {
   border-radius: 0;
+  border-top: none;
 }
 
 .border-group.border-group--vertical > *:last-child {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  border-top: none;
 }
 
 .border-group.border-group--vertical > *:only-child {
@@ -746,5 +778,9 @@ button.full-width {
 
 .pull-right {
   text-align: right;
+}
+
+.inline-editable {
+  font-size: 1rem;
 }
 /*# sourceMappingURL=style.css.map */

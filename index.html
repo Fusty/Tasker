@@ -47,6 +47,10 @@
         
         <main>
             <div class="row">
+                <!-- <div class="width-12">
+                    <input type="text" class="light1" v-model="timeTestInput"/>
+                    <span v-text="timeTestOutput"></span>
+                </div> -->
                 <!-- LEFT COLUMN -->
                 <div class="width-5">
                     <task-list :show-children="true" :tasks="topLevelTasks" :is-list-root="true" @click-task="inTask => focusTask(inTask)"></task-list>
@@ -168,7 +172,8 @@
             <input class="big danger1" type="text" id="new-task-title" v-if="isTiming" v-model="times[0].title"/>
         </div>
         <div class="width-5 min-width-17 ">
-            <span class="stopwatch" :class="{'timer-in-progress': isTiming}">{{ stopwatch }}</span>
+            <inline-editable v-show="isTiming" class="stopwatch" @updateValue="updateTempTime" @saveValue="saveTime" :show-value="false" :class="{'timer-in-progress': isTiming}" :pre-text="stopwatch" field-type="text" field-size="20" :field-classes="['light2']" :data="inlineData" data-field-name="time"></inline-editable>
+            <span class="stopwatch" :class="{'timer-in-progress': isTiming}" v-show="!isTiming" v-text="stopwatch"></span>
         </div>
         <div class="width-12 border-group border-group--horizontal margin-bottom-0_5">
             <button v-if="!isTiming" @click="startTimer" class="light2 outline grow">
@@ -189,13 +194,13 @@
         <button class="light1 width-12" @click="openNestedTimeReport()">Get nested time report</button>
         <ul class="list-blank no-left-margin">
             <li v-for="(day, index) in timesAsDays(times.slice(0,currentPageSize))" class="row space-between light1">
-                <span class="width-4"><h4 v-text="day.date"></h4></span>
-                <span class="width-4"><h4 v-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title)"></h4></span>
-                <span class="width-4 pull-right"><h4 v-text="totalTime(day.times)"></h4></span>
+                <span class="width-3"><h4 v-text="day.date"></h4></span>
+                <span class="width-6"><h4 v-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title)"></h4></span>
+                <span class="width-3 pull-right"><h4 v-text="totalTime(day.times)"></h4></span>
                 <ul class="width-12 list-blank no-left-margin">
                     <li v-for="(time, index) in day.times" class="row light1">
                         <div class="row">
-                            <inline-editable class="width-7" :pre-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title) +' -> '" field-type="text" :field-classes="['light1']" :data="time" data-field-name="title"></inline-editable>
+                            <inline-editable class="width-7" :show-value="true" :pre-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title) +' -> '" field-type="text" field-size="40" :field-classes="['light1']" :data="time" data-field-name="title"></inline-editable>
                             <span class="width-3 pull-right" v-text="hourSpan(time)"></span>
                             <span class="width-2 pull-right" v-text="elapsed(time)"></span>
                         </div>
@@ -218,14 +223,14 @@
                 <main>
                     <ul class="list-blank no-left-margin">
                         <li v-for="(day, index) in nestedTimes" class="row space-between light1">
-                            <span class="width-4"><h4 v-text="day.date"></h4></span>
-                            <span class="width-4"><h4 v-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title)"></h4></span>
-                            <span class="width-4 pull-right"><h4 v-text="totalTime(day.breadcrumbs)"></h4></span>
+                            <span class="width-3"><h4 v-text="day.date"></h4></span>
+                            <span class="width-6"><h4 v-text="(breadCrumbs.length > 0 ? breadCrumbs : task.title)"></h4></span>
+                            <span class="width-3 pull-right"><h4 v-text="totalTime(day.breadcrumbs)"></h4></span>
                             <ul class="width-12 list-blank no-left-margin">
                                 <div v-for="(breadcrumb, index) in day.breadcrumbs">
                                     <li v-for="(time, index) in breadcrumb.times" class="row light1">
                                         <div class="row">
-                                            <inline-editable class="width-7" :pre-text="breadcrumb.breadcrumb + ' -> '" field-type="text" :field-classes="['light1']" :data="time" data-field-name="title"></inline-editable>
+                                            <inline-editable class="width-7" :show-value="true" :pre-text="breadcrumb.breadcrumb + ' -> '" field-type="text" field-size="10" :field-classes="['light1']" :data="time" data-field-name="title"></inline-editable>
                                             <span class="width-3 pull-right" v-text="hourSpan(time)"></span>
                                             <span class="width-2 pull-right" v-text="elapsed(time)"></span>
                                         </div>
@@ -246,17 +251,37 @@
     </div>
 </script>
 
+<script id="time-log-editor" type="text/x-template">
+    <div class="modal-wrap" :class="{active: showTimeEdtior}" :id="'time-editor-'+time.id">
+        <div class="modal">
+            <header class="light1 row">
+                <h2 class="width-10">Time Log Entry Editor</h2>
+                <div class="width-2 row">
+                    <button class="danger1 outline" @click="closeTimeEditor()">X</button>
+                </div>
+            </header>
+            <main>
+                Form Junk
+            </main>
+            <footer>
+                <button class="light1 outline pull-right" @click="closeTimeEditor()">Close</button>
+            </footer>
+        </div>
+    </div>
+    
+</script>
+
 <script id="inline-editable" type="text/x-template">
-    <span >
-        <span v-if="preText" v-text="preText"></span>
-        <input @keydown.enter="stopEditing" :type="fieldType" :class="fieldClasses" v-if="editing" v-model="value"></input>
-        <span @dblclick="startEditing" v-if="!editing" v-text="value"></span>
-        <span v-if="postText" v-text="postText"></span>
+    <span @dblclick="startEditing" @keydown.escape="revertEditing">
+        <span v-if="preText && !editing" v-text="preText"></span>
+        <input @keydown.enter="stopEditing" @blur="revertEditing" :size="fieldSize" :type="fieldType" class="inline-editable" :class="fieldClasses" v-if="editing" v-model="value"></input>
+        <span  v-if="!editing && showValue" v-text="value"></span>
+        <span v-if="postText && !editing" v-text="postText"></span>
     </span>
 </script>
 
 
-<!-- APP -->
+<!-- APP -->e
 <script src="js/googleSheetsApi.js"></script>
 <script src="js/store.js"></script>
 <script src="js/components.js"></script>
