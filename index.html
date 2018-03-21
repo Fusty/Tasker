@@ -19,6 +19,7 @@
     <!-- MOMENT -->
     <script src="js/moment.js"></script>
     <script src="js/autosize.min.js"></script>
+    <script src="js/object_hash.js"></script>
     <script async defer src="https://apis.google.com/js/api.js"
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
@@ -125,9 +126,9 @@
                 <task-list-item :task="task" :task-card-heading="true"></task-list-item>
                 <p class="bread-crumbs" v-if="breadCrumbs" v-text="breadCrumbs"></p>
                 <textarea class="task-description" v-model="task.description" v-autosize="task.description" placeholder="Enter Task Description . . ."></textarea>
-                <task-card-timer :times="task.times"></task-card-timer>
+                <task-card-timer :times="task.times"></task-card-timer><br/>
+                <task-list :show-children="true" :tasks="task.tasks" :parent-task="task" :is-list-root="true" @click-task="inTask => $emit('click-task', inTask)" @specific-click-task="inTask => $emit('specific-click-task', inTask)"></task-list><br/>
                 <input v-if="task.tasks.length > 0" class="sub-task-input light1" type="text" v-model="newTaskTitle" @keyup.enter="addTask(task)" placeholder="Type Sub-Task Title and hit return"/>
-                <task-list :show-children="true" :tasks="task.tasks" :parent-task="task" :is-list-root="true" @click-task="inTask => $emit('click-task', inTask)" @specific-click-task="inTask => $emit('specific-click-task', inTask)"></task-list>
             </div>
             <div v-show="tab == 'times'">
                 <task-card-timer :times="task.times"></task-card-timer>

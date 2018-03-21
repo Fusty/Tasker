@@ -355,6 +355,7 @@ const store = new Vuex.Store({
         tasks: [],
         taskRelationships: [],
         taskStack: new TaskStack(),
+        saveHash: '',
     },
     getters: {
         topLevelTasks: state => {
@@ -533,11 +534,18 @@ const store = new Vuex.Store({
             context.commit("FIXORPHANS", context.getters);
         },
         SAVE: (context) => {
-            localStorage.setItem("tasker", JSON.stringify({
+            var saveObject = {
                 tasks: context.state.tasks,
                 taskRelationships: context.state.taskRelationships,
                 taskStack: context.state.taskStack
-            }));
+            };
+
+            // Only save if the content has changed
+            var saveHash = objectHash(saveObject);
+            if(saveHash != context.state.saveHash) {
+                context.state.saveHash = saveHash;
+                localStorage.setItem("tasker", JSON.stringify(saveObject));
+            }
         },
         SETPARENT: (context, payload) => {
             var parent = payload.parent;
@@ -547,7 +555,6 @@ const store = new Vuex.Store({
 
             // Set new sort
             context.state.tasks.find(task => task.id == child).sort = newIndex - 0.5;
-            console.log("SETPARENT", context.state.tasks.find(task => task.id == child).title, context.state.tasks.find(task => task.id == child).sort, payload);
 
             // Remove this task from the relationships if it exists
             context.state.taskRelationships = context.state.taskRelationships.filter(relationship => relationship.child != child);
@@ -560,21 +567,15 @@ const store = new Vuex.Store({
                     child: child
                 });
 
-                console.log("Just set a new parent", {
-                    parent: parent,
-                    child: child
-                });
             }
 
         },
         REORDER: (context, payload) => {
-            console.log("Reorder", payload);
             if(payload.newIndex == payload.oldIndex)
                 return;
             var offset = payload.newIndex > payload.oldIndex ? 0.5 : -0.5;
             // Set new sort
             context.state.tasks.find(task => task.id == payload.id).sort = payload.newIndex + offset;
-            console.log(offset, context.state.tasks.find(task => task.id == payload.id).title, context.state.tasks.find(task => task.id == payload.id).sort);
         },
         DELETETASK: (context, task) => {
             context.commit("DELETETASK", task);
